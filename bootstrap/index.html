@@ -13,6 +13,14 @@
       crossorigin="anonymous"
     />
 
+    <!-- using font awesome libraries -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+
     <link
       href="https://fonts.googleapis.com/css?family=Lobster"
       rel="stylesheet"
@@ -20,17 +28,8 @@
     />
 
     <style>
-      .red-text {
-        color: red;
-      }
-
       h2 {
         font-family: Lobster, Monospace;
-      }
-
-      p {
-        font-size: 16px;
-        font-family: Monospace;
       }
 
       .thick-green-border {
@@ -39,24 +38,24 @@
         border-style: solid;
         border-radius: 50%;
       }
-
-      .smaller-image {
-        width: 100px;
-      }
     </style>
   </head>
   <body>
     <div class="container-fluid">
-      <h2 class="red-text text-center">CatPhotoApp</h2>
+      <div class="row col-xs-8">
+        <h2 class="text-primary text-center">CatPhotoApp</h2>
+      </div>
 
       <p>Click here for <a href="#">cat photos</a>.</p>
 
       <a href="#"
-        ><img
-          class="smaller-image thick-green-border"
-          src="https://cdn.freecodecamp.org/curriculum/cat-photo-app/relaxing-cat.jpg"
-          alt="A cute orange cat lying on its back."
-        />
+        ><div class="row col-xs-4">
+          <img
+            class="img-responsive thick-green-border"
+            src="https://cdn.freecodecamp.org/curriculum/cat-photo-app/relaxing-cat.jpg"
+            alt="A cute orange cat lying on its back."
+          />
+        </div>
       </a>
 
       <img
@@ -65,10 +64,25 @@
         class="img-responsive"
       />
 
-      <button class="btn btn-primary btn-block">Like</button>
-      <button class="btn btn-info btn-block">Info</button>
+      <div class="row">
+        <div class="col-xs-4">
+          <button class="btn btn-primary btn-block">
+            <i class="fas fa-thumbs-up"></i> Like
+          </button>
+        </div>
+        <div class="col-xs-4">
+          <button class="btn btn-info btn-block">
+            <i class="fas fa-info-circle"></i> Info
+          </button>
+        </div>
+        <div class="col-xs-4">
+          <button class="btn btn-danger btn-block">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+      </div>
 
-      <p>Things cats love:</p>
+      <p>Things cats <span class="text-danger">love</span>:</p>
       <ul>
         <li>cat nip</li>
         <li>laser pointers</li>
@@ -81,11 +95,25 @@
         <li>other cats</li>
       </ol>
       <form action="https://freecatphotoapp.com/submit-cat-photo">
-        <label><input type="radio" name="indoor-outdoor" /> Indoor</label>
-        <label><input type="radio" name="indoor-outdoor" /> Outdoor</label>
-        <label><input type="checkbox" name="personality" /> Loving</label>
-        <label><input type="checkbox" name="personality" /> Lazy</label>
-        <label><input type="checkbox" name="personality" /> Crazy</label>
+        <div class="row">
+          <div class="col-xs-6">
+            <label><input type="radio" name="indoor-outdoor" /> Indoor</label>
+          </div>
+          <div class="col-xs-6">
+            <label><input type="radio" name="indoor-outdoor" /> Outdoor</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4">
+            <label><input type="checkbox" name="personality" /> Loving</label>
+          </div>
+          <div class="col-xs-4">
+            <label><input type="checkbox" name="personality" /> Lazy</label>
+          </div>
+          <div class="col-xs-4">
+            <label><input type="checkbox" name="personality" /> Crazy</label>
+          </div>
+        </div>
         <input type="text" placeholder="cat photo URL" required />
         <button type="submit">Submit</button>
       </form>
