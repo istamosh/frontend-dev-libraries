@@ -1,0 +1,108 @@
+// Store data with sass variables
+
+$text-color: red;
+
+.header {
+  text-align: center;
+}
+.blog-post,
+h2 {
+  color: $text-color;
+}
+
+// Nesting CSS with Sass
+
+.blog-post {
+  h1 {
+    text-align: center;
+    color: blue;
+  }
+  p {
+    font-size: 20px;
+  }
+}
+
+// Mixin
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+#awesome {
+  width: 150px;
+  height: 150px;
+  background-color: green;
+
+  @include border-radius(15px);
+}
+
+// IF ELSE
+
+@mixin border-stroke($val) {
+  @if $val == light {
+    border: 1px solid black;
+  } @else if $val == medium {
+    border: 3px solid black;
+  } @else if $val == heavy {
+    border: 6px solid black;
+  } @else {
+    border: none;
+  }
+}
+
+#box {
+  width: 150px;
+  height: 150px;
+  background-color: red;
+  @include border-stroke(medium);
+}
+
+// FOR
+
+@for $j from 1 through 6 {
+  .text-#{$j} {
+    font-size: 15px * $j;
+  }
+}
+
+// Use @each to Map Over Items in a List
+
+@each $color in blue, black, red {
+  .#{$color}-bg {
+    background-color: $color;
+    height: 200px;
+    width: 200px;
+  }
+}
+
+// Apply a Style Until a Condition is Met with @while
+
+$x: 1;
+@while $x < 6 {
+  .text-#{$x} {
+    font-size: 15px * $x;
+  }
+  $x: $x + 1;
+}
+
+// Split Your Styles into Smaller Chunks with Partials
+
+// @import "variables";
+
+// Extend One Set of CSS Styles to Another Element
+
+h3 {
+  text-align: center;
+}
+.info {
+  width: 200px;
+  border: 1px solid black;
+  margin: 0 auto;
+}
+.info-important {
+  @extend .info;
+  background-color: magenta;
+}

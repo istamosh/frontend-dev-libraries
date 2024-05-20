@@ -1,0 +1,108 @@
+.header {
+  text-align: center;
+}
+
+.blog-post,
+h2 {
+  color: red;
+}
+
+.blog-post h1 {
+  text-align: center;
+  color: blue;
+}
+
+.blog-post p {
+  font-size: 20px;
+}
+
+#awesome {
+  width: 150px;
+  height: 150px;
+  background-color: green;
+  border-radius: 15px;
+}
+
+#box {
+  width: 150px;
+  height: 150px;
+  background-color: red;
+  border: 3px solid black;
+}
+
+.text-1 {
+  font-size: 15px;
+}
+
+.text-2 {
+  font-size: 30px;
+}
+
+.text-3 {
+  font-size: 45px;
+}
+
+.text-4 {
+  font-size: 60px;
+}
+
+.text-5 {
+  font-size: 75px;
+}
+
+.text-6 {
+  font-size: 90px;
+}
+
+.blue-bg {
+  background-color: blue;
+  height: 200px;
+  width: 200px;
+}
+
+.black-bg {
+  background-color: black;
+  height: 200px;
+  width: 200px;
+}
+
+.red-bg {
+  background-color: red;
+  height: 200px;
+  width: 200px;
+}
+
+.text-1 {
+  font-size: 15px;
+}
+
+.text-2 {
+  font-size: 30px;
+}
+
+.text-3 {
+  font-size: 45px;
+}
+
+.text-4 {
+  font-size: 60px;
+}
+
+.text-5 {
+  font-size: 75px;
+}
+
+h3 {
+  text-align: center;
+}
+
+.info, .info-important {
+  width: 200px;
+  border: 1px solid black;
+  margin: 0 auto;
+}
+
+.info-important {
+  background-color: magenta;
+}
+/*# sourceMappingURL=style.css.map */
