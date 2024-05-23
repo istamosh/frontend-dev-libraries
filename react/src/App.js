@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-const App = () => {
+/* const App = () => {
   const JSX = (
     <div>
       <h2>Welcome to React!</h2>
@@ -15,7 +15,7 @@ const App = () => {
   const MyComponent = function () {
     return <div>Text</div>;
   };
-};
+}; */
 
 // create a component with composition
 const ChildComponent = () => {
@@ -213,7 +213,7 @@ class ToDo extends React.Component {
 ShoppingCart.defaultProps = { items: 0 }; */
 
 // Override Default Props
-const Items = (props) => {
+/* const Items = (props) => {
   return <h1>Current Quantity of Items in Cart: {props.quantity}</h1>;
 };
 
@@ -226,14 +226,64 @@ class ShoppingCart extends React.Component {
     super(props);
   }
   render() {
-    {
-      /* Change code below this line */
-    }
+
     return <Items quantity={10} />;
-    {
-      /* Change code above this line */
-    }
+
+  }
+} */
+
+// Use PropTypes to Define the Props You Expect
+/* import PropTypes from "prop-types";
+
+const Items = (props) => {
+  return <h1>Current Quantity of Items in Cart: {props.quantity}</h1>;
+};
+
+// Change code below this line
+Items.propTypes = {
+  quantity: PropTypes.number.isRequired,
+};
+// Change code above this line
+
+Items.defaultProps = {
+  quantity: 0,
+};
+
+class ShoppingCart extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <Items />;
+  }
+} */
+
+// Access Props Using this.props
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <div>
+        <Welcome name={"hehe"} />
+      </div>
+    );
+  }
+}
+class Welcome extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <div>
+        <p>
+          Hello, <strong>{this.props.name}</strong>!
+        </p>
+      </div>
+    );
   }
 }
 
-ReactDOM.render(<ShoppingCart />, document.getElementById("challenge-node"));
+ReactDOM.render(<App />, document.getElementById("challenge-node"));
