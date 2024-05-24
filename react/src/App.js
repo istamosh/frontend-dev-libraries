@@ -233,9 +233,9 @@ class ShoppingCart extends React.Component {
 } */
 
 // Use PropTypes to Define the Props You Expect
-/* import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
-const Items = (props) => {
+/* const Items = (props) => {
   return <h1>Current Quantity of Items in Cart: {props.quantity}</h1>;
 };
 
@@ -259,7 +259,7 @@ class ShoppingCart extends React.Component {
 } */
 
 // Access Props Using this.props
-class App extends React.Component {
+/* class App extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -284,6 +284,33 @@ class Welcome extends React.Component {
       </div>
     );
   }
-}
+} */
 
-ReactDOM.render(<App />, document.getElementById("challenge-node"));
+// Review Using Props with Stateless Functional Components
+class CampSite extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <div>
+        <Camper />
+      </div>
+    );
+  }
+}
+// Change code below this line
+class Camper extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render = () => <p>{this.props.name}</p>;
+}
+Camper.defaultProps = {
+  name: "CamperBot",
+};
+Camper.propTypes = {
+  name: PropTypes.string.isRequired,
+};
+
+ReactDOM.render(<CampSite />, document.getElementById("challenge-node"));
