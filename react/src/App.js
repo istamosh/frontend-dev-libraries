@@ -116,7 +116,7 @@ class TypesOfFood extends React.Component {
 // export default TypesOfFood;
 
 // Write a React Component from Scratch
-class MyComponent extends React.Component {
+/* class MyComponent extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -127,7 +127,7 @@ class MyComponent extends React.Component {
       </div>
     );
   }
-}
+} */
 
 // Pass Props to a Stateless Functional Component
 const CurrentDate = (props) => {
@@ -287,7 +287,7 @@ class Welcome extends React.Component {
 } */
 
 // Review Using Props with Stateless Functional Components
-class CampSite extends React.Component {
+/* class CampSite extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -311,6 +311,136 @@ Camper.defaultProps = {
 };
 Camper.propTypes = {
   name: PropTypes.string.isRequired,
-};
+}; */
 
-ReactDOM.render(<CampSite />, document.getElementById("challenge-node"));
+// Create a stateful component
+// in order to use this.state you need to extend react component first
+class StatefulComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    // Only change code below this line
+    this.state = {
+      firstName: "Istamosh",
+    };
+    // Only change code above this line
+  }
+  render() {
+    return (
+      <div>
+        <h1>{this.state.firstName}</h1>
+      </div>
+    );
+  }
+}
+
+// Render State in the User Interface
+// MyComponent already stateful
+/* class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "freeCodeCamp",
+    };
+  }
+  render() {
+    const name = this.state.name;
+    return (
+      // fill code inside div
+      <div>
+        <h1>{name}</h1>
+      </div>
+    );
+  }
+} */
+
+// Set State with this.setState
+/* class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "Initial State",
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    // Change code below this line
+    this.setState({
+      name: "React Rocks!",
+    });
+    // Change code above this line
+  }
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick}>Click Me</button>
+        <h1>{this.state.name}</h1>
+      </div>
+    );
+  }
+} */
+
+// bind 'this' to a class method
+/* class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: "Hello",
+    };
+    // Change code below this line
+    this.handleClick = this.handleClick.bind(this);
+    // Change code above this line
+  }
+  handleClick() {
+    this.setState({
+      text: "You clicked!",
+    });
+  }
+  render() {
+    return (
+      // add onclick on button
+      <div>
+        <button onClick={this.handleClick}>Click Me</button>
+        <h1>{this.state.text}</h1>
+      </div>
+    );
+  }
+} */
+
+// Use State to Toggle an Element
+// toggle visibility between true and false with just one button
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visibility: false,
+    };
+    // Change code below this line
+    this.toggleVisibility = this.toggleVisibility.bind(this);
+    // Change code above this line
+  }
+  // Change code below this line
+  toggleVisibility() {
+    this.setState((state) => ({
+      visibility: state.visibility ? false : true,
+    }));
+  }
+  // Change code above this line
+  render() {
+    if (this.state.visibility) {
+      return (
+        <div>
+          <button onClick={this.toggleVisibility}>Click Me</button>
+          <h1>Now you see me!</h1>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <button onClick={this.toggleVisibility}>Click Me</button>
+        </div>
+      );
+    }
+  }
+}
+
+ReactDOM.render(<MyComponent />, document.getElementById("challenge-node"));
