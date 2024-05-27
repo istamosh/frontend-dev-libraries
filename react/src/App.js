@@ -886,7 +886,7 @@ class MagicEightBall extends React.Component {
 } */
 
 // Use && for a More Concise Conditional
-class MyComponent extends React.Component {
+/* class MyComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -908,9 +908,10 @@ class MyComponent extends React.Component {
       </div>
     );
   }
-}
+} */
 
 // Use a Ternary Expression for Conditional Rendering
+// you can nest an if else in a ternary expression (a ? b : c ? c1 : c2)
 const inputStyle = {
   width: 235,
   margin: 5,
@@ -954,11 +955,225 @@ class CheckUserAge extends React.Component {
         />
         <br />
         {/* Change code below this line */}
-        {buttonOne}
+        {this.state.userAge === ""
+          ? buttonOne
+          : this.state.userAge < 18
+          ? buttonThree
+          : buttonTwo}
         {/* Change code above this line */}
       </div>
     );
   }
 }
 
-ReactDOM.render(<CheckUserAge />, document.getElementById("challenge-node"));
+// Render Conditionally from Props
+class Results extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    {
+      /* Change code below this line */
+    }
+    return <h1>{this.props.fiftyFifty}</h1>;
+    {
+      /* Change code above this line */
+    }
+  }
+}
+
+class GameOfChance extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      counter: 1,
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    this.setState((prevState) => {
+      // Complete the return statement:
+      return {
+        counter: prevState.counter + 1,
+      };
+    });
+  }
+  render() {
+    const expression = Math.random() >= 0.5; // Change this line
+    return (
+      <div>
+        <button onClick={this.handleClick}>Play Again</button>
+        {/* Change code below this line */}
+        <Results fiftyFifty={expression ? "You Win!" : "You Lose!"} />
+        {/* Change code above this line */}
+        <p>{"Turn: " + this.state.counter}</p>
+      </div>
+    );
+  }
+}
+
+// Change Inline CSS Conditionally Based on Component State
+class GateKeeper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: "",
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(event) {
+    this.setState({ input: event.target.value });
+  }
+  render() {
+    let inputStyle = {
+      border: "1px solid black",
+    };
+    // Change code below this line
+    inputStyle.border = this.state.input.length > 15 && "3px solid red";
+    // Change code above this line
+    return (
+      <div>
+        <h3>Don't Type Too Much:</h3>
+        <input
+          type="text"
+          style={inputStyle}
+          value={this.state.input}
+          onChange={this.handleChange}
+        />
+      </div>
+    );
+  }
+}
+
+// Use Array.map() to Dynamically Render Elements
+const textAreaStyles = {
+  width: 235,
+  margin: 5,
+};
+
+class MyToDoList extends React.Component {
+  constructor(props) {
+    super(props);
+    // Change code below this line
+    this.state = {
+      toDoList: [],
+      userInput: "",
+    };
+    // Change code above this line
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleSubmit() {
+    const itemsArray = this.state.userInput.split(",");
+    this.setState({
+      toDoList: itemsArray,
+    });
+  }
+  handleChange(e) {
+    this.setState({
+      userInput: e.target.value,
+    });
+  }
+  render() {
+    const items = this.state.toDoList.map((el) => <li>{el}</li>); // Change this line
+    return (
+      <div>
+        <textarea
+          onChange={this.handleChange}
+          value={this.state.userInput}
+          style={textAreaStyles}
+          placeholder="Separate Items With Commas"
+        />
+        <br />
+        <button onClick={this.handleSubmit}>Create List</button>
+        <h1>My "To Do" List:</h1>
+        <ul>{items}</ul>
+      </div>
+    );
+  }
+}
+
+// Give Sibling Elements a Unique Key Attribute
+const frontEndFrameworks = [
+  "React",
+  "Angular",
+  "Ember",
+  "Knockout",
+  "Backbone",
+  "Vue",
+];
+
+function Frameworks() {
+  const renderFrameworks = frontEndFrameworks.map((el) => (
+    <li key={el.toString()}>{el}</li>
+  )); // Change this line
+  return (
+    <div>
+      <h1>Popular Front End JavaScript Frameworks</h1>
+      <ul>{renderFrameworks}</ul>
+    </div>
+  );
+}
+
+// Use Array.filter() to Dynamically Filter an Array
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [
+        {
+          username: "Jeff",
+          online: true,
+        },
+        {
+          username: "Alan",
+          online: false,
+        },
+        {
+          username: "Mary",
+          online: true,
+        },
+        {
+          username: "Jim",
+          online: false,
+        },
+        {
+          username: "Sara",
+          online: true,
+        },
+        {
+          username: "Laura",
+          online: true,
+        },
+      ],
+    };
+  }
+  render() {
+    const usersOnline = this.state.users.filter((el) => el.online); // Change this line
+    const renderOnline = usersOnline.map((el) => (
+      <li key={el.username.toString()}>{el.username}</li>
+    )); // Change this line
+    return (
+      <div>
+        <h1>Current Online Users:</h1>
+        <ul>{renderOnline}</ul>
+      </div>
+    );
+  }
+}
+
+// Render React on the Server with renderToString
+import ReactDOMServer from "react-dom/server";
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <div />;
+  }
+}
+
+// Change code below this line
+const html = ReactDOMServer.renderToString(<App />);
+
+ReactDOM.render(html, document.getElementById("challenge-node"));
