@@ -1176,4 +1176,18 @@ class App extends React.Component {
 // Change code below this line
 const html = ReactDOMServer.renderToString(<App />);
 
+// Redux + React Redux section
+import Redux from "redux";
+import ReactRedux from "react-redux";
+import { legacy_createStore as createStore } from "redux";
+
+// Create a Redux Store
+const reducer = (state = 5) => {
+  return state;
+};
+// Redux methods are available from a Redux object
+// For example: Redux.createStore()
+// Define the store here:
+const store = createStore(reducer);
+
 ReactDOM.render(html, document.getElementById("challenge-node"));
