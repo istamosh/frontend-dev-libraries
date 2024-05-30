@@ -193,7 +193,7 @@ const store = createStore(reducer);
   console.log(store.getState()); */
 
   // Use Middleware to Handle Asynchronous Actions
-  const REQUESTING_DATA = "REQUESTING_DATA";
+  /*   const REQUESTING_DATA = "REQUESTING_DATA";
   const RECEIVED_DATA = "RECEIVED_DATA";
 
   const requestingData = () => {
@@ -240,7 +240,7 @@ const store = createStore(reducer);
   const store = createStore(
     asyncDataReducer,
     applyMiddleware(ReduxThunk.default)
-  );
+  ); */
 
   return <h1>Playground</h1>;
 }
