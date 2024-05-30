@@ -3,13 +3,14 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+
 // custom redux store from playground
 import { Provider } from "react-redux";
-import reduxStore from "./redux_playground";
+import { store } from "./redux_playground/index";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <Provider store={reduxStore}>
+  <Provider store={store}>
     <React.StrictMode>
       <App />
     </React.StrictMode>

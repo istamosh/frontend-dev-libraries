@@ -1,10 +1,17 @@
 // import logo from './logo.svg';
 import "./App.css";
+// fetch redux store var then use a selector on it
 import { useSelector } from "react-redux";
 
 function App() {
-  const counter = useSelector((state) => state.counter);
-  return <div></div>;
+  const fetchedState = useSelector((state) => state);
+
+  return (
+    <div>
+      <h1>Counter App</h1>
+      <h2>{fetchedState}</h2>
+    </div>
+  );
   /*  return (
      <div className="App">
       <header className="App-header">
