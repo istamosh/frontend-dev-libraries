@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 function App() {
   const fetchedState = useSelector((state) => state);
+  console.log("Fetched state:", fetchedState);
 
   return (
     <div>
