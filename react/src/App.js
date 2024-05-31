@@ -1177,3 +1177,5 @@ class App extends React.Component {
 const html = ReactDOMServer.renderToString(<App />);
 
 ReactDOM.render(html, document.getElementById("challenge-node"));
+
+// run the server using "npm start"

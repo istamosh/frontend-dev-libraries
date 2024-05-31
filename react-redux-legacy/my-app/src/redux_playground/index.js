@@ -288,7 +288,7 @@ multDispatch(4, "dec");
 console.log(store.getState()); */
 
 // Never Mutate State
-const ADD_TO_DO = "ADD_TO_DO";
+/* const ADD_TO_DO = "ADD_TO_DO";
 
 // -A list of strings representing tasks to do:
 const todos = [
@@ -302,7 +302,7 @@ const immutableReducer = (state = todos, action) => {
   switch (action.type) {
     case ADD_TO_DO:
       // Don't mutate state here or the tests will fail
-      return [...state, action.todo];
+      return todos.concat(action.todo);
     default:
       return state;
   }
@@ -320,7 +320,81 @@ const store = createStore(immutableReducer);
 // testing stored state if it's trying to mutate the state, by firing a function with payload
 store.dispatch(addToDo("hehe-ing"));
 // see the state results
-console.log(store.getState());
+console.log(store.getState()); */
+
+// Use the Spread Operator on Arrays
+/* const immutableReducer = (state = ["Do not mutate state!"], action) => {
+  switch (action.type) {
+    case "ADD_TO_DO":
+      // Don't mutate state here or the tests will fail
+      return [...state, action.todo];
+    default:
+      return state;
+  }
+};
+
+const addToDo = (todo) => {
+  return {
+    type: "ADD_TO_DO",
+    todo,
+  };
+};
+
+const store = createStore(immutableReducer);
+store.dispatch(addToDo("Ok i am not mutating this state chill!")); */
+
+// Remove an Item from an Array
+/* const immutableReducer = (state = [0, 1, 2, 3, 4, 5], action) => {
+  switch (action.type) {
+    case "REMOVE_ITEM":
+      // Don't mutate state here or the tests will fail
+      // state.slice(0, 3) will return [0,1,2]
+      // state.slice(3+1) will return [4, ...]
+      // then concat them [0,1,2] + [4, ...] = [0,1,2,4,...]
+      return state.slice(0, action.index).concat(state.slice(action.index + 1));
+    default:
+      return state;
+  }
+};
+
+const removeItem = (index) => {
+  return {
+    type: "REMOVE_ITEM",
+    index,
+  };
+};
+
+const store = createStore(immutableReducer);
+store.dispatch(removeItem(3)); */
+
+// Copy an Object with Object.assign
+const defaultState = {
+  user: "CamperBot",
+  status: "offline",
+  friends: "732,982",
+  community: "freeCodeCamp",
+};
+
+const immutableReducer = (state = defaultState, action) => {
+  switch (action.type) {
+    case "ONLINE":
+      // Don't mutate state here or the tests will fail
+      const newState = Object.assign({}, state);
+      newState.status = "online";
+      return newState;
+    default:
+      return state;
+  }
+};
+
+const wakeUp = () => {
+  return {
+    type: "ONLINE",
+  };
+};
+
+const store = createStore(immutableReducer);
+store.dispatch(wakeUp());
 
 // export redux store for ../index.js
 export { store };
