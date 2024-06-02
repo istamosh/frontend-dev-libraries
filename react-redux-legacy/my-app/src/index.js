@@ -1,23 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-// import App from "./App";
+import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 // custom redux store from playground
 import { Provider } from "react-redux";
-import { store } from "./redux-playground/index";
+// import { store } from "./redux-playground/index";
 
 // React Redux Playground
 import ReactRedux from "./react-redux-playground/index";
+import { store } from "./react-redux-playground/index";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* <Provider store={store}>
+    <Provider store={store}>
       <App />
-    </Provider> */}
-    <ReactRedux />
+      {/* <ReactRedux /> */}
+    </Provider>
   </React.StrictMode>
 );
 

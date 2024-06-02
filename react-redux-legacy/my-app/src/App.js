@@ -15,8 +15,8 @@ function App() {
   return (
     <div>
       <h1>Redux Playground</h1>
-      {/* <h2>{fetchedState}</h2> */}
-      <ul>{mappedObj}</ul>
+      <h2>{fetchedState}</h2>
+      {/* <ul>{mappedObj}</ul> */}
     </div>
   );
   /*  return (
