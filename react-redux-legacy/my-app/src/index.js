@@ -15,10 +15,11 @@ import { store } from "./react-redux-playground/index";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-      {/* <ReactRedux /> */}
-    </Provider>
+    {/* <Provider store={store}> */}
+    {/* <Provider> */}
+    {/* <App /> */}
+    <ReactRedux />
+    {/* </Provider> */}
   </React.StrictMode>
 );
 
