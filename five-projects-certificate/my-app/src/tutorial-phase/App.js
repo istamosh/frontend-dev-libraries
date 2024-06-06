@@ -19,7 +19,7 @@ const Time = () => {
     hour < 12 ? "morning" : hour >= 12 && hour < 17 ? "afternoon" : "night";
 
   return (
-    <div>
+    <div style={{ backgroundColor: "lightgray" }}>
       It's about {date.getHours() % 12} o'clock <br />
       Good {timeOfDay}!
     </div>
