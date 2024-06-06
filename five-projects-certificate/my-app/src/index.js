@@ -1,12 +1,13 @@
 import React from "react";
-// import ReactDOM from "react-dom/client"; // ReactDOM.createRoot
+// import ReactDOM from "react-dom/client"; // ReactDOM.createRoot is for react 18
 import ReactDOM from "react-dom"; // ReactDOM.render
 import "./index.css";
 // import App from "./App";
+import Main from "./Main";
+
 // import reportWebVitals from "./reportWebVitals";
 
-import Tutorial from "./tutorial-phase/App";
-
+// React 18
 // const root = ReactDOM.createRoot(document.getElementById("root"));
 // root.render(
 //   <React.StrictMode>
@@ -14,12 +15,7 @@ import Tutorial from "./tutorial-phase/App";
 //   </React.StrictMode>
 // );
 
-ReactDOM.render(
-  <>
-    <Tutorial />
-  </>,
-  document.getElementById("app")
-);
+ReactDOM.render(<Main />, document.getElementById("app"));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
