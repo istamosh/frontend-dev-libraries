@@ -1,84 +1,31 @@
 import React from "react";
 
-/* const fetchQuotes = async () => {
+const fetchQuotes = async () => {
   try {
     const fetched = await fetch(
       "https://gist.githubusercontent.com/nasrulhazim/54b659e43b1035215cd0ba1d4577ee80/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json"
     );
+    if (!fetched.ok) throw "fetch failed!";
     return await fetched.json();
   } catch (error) {
     console.log(error);
+    return false;
   }
 };
 
 (async () => {
-  console.log(await fetchQuotes());
-})(); */
-
-const fetchQuotes = async () => {
-  let fetched;
-
-  const tryFetch = async () => {
-    fetched = await fetch(
-      "https://gist.githubusercontent.com/nasrulhazim/54b659e43b1035215cd0ba1d4577ee80/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json"
-    ); // Making the req
-    return await fetched.json(); // parsing the response
-  };
-  await tryFetch();
-
-  while (!fetched.ok) {
-    let timeOut = 5000;
-    setTimeout(() => {
-      console.log("5 seconds passed");
+  let fetch = await fetchQuotes();
+  // check if fetch is failed (false)
+  let timeOut = 5000;
+  while (!fetch) {
+    setTimeout(async () => {
+      fetch = await fetchQuotes();
     }, timeOut);
     timeOut += 5000;
   }
-
-  // if (fetched.ok) {
-  //   console.log(fetched);
-  // } else {
-  //   while (!fetched.ok) {}
-  // }
-
-  // if (fetched.ok) {
-  //   console.log(fetched.ok);
-  //   const error = new Error();
-  //   return error; // return success object
-  // } else {
-  //   console.log("elsed");
-  // }
-
-  /* const responseError = {
-    type: 'Error',
-    message: result.message || 'Something went wrong',
-    data: result.data || '',
-    code: result.code || '',
-  };
-
-  const error = new Error();
-  error.info = responseError;
-
-  return (error); */
-};
-
-(async () => {
-  console.log(await fetchQuotes());
+  // do something
+  console.log(fetch);
 })();
-
-// fetch(
-//   "https://gist.githubusercontent.com/nasrulhazim/54b659e43b1035215cd0ba1d4577ee80/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json"
-// )
-//   .then((response) => response.json())
-//   .then((result) => {
-//     console.log(result.quotes);
-//     console.log(result.quotes.length);
-//     console.log(`${result.quotes[0].quote}; ${result.quotes[0].author}`);
-//   });
-
-// async function wait() {
-//   console.log(await item["quotes"]);
-// }
-// wait();
 
 const App = () => (
   <div>
