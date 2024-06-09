@@ -24,17 +24,21 @@ const fetchQuotes = async () => {
     ); // Making the req
     return await fetched.json(); // parsing the response
   };
+  await tryFetch();
 
   while (!fetched.ok) {
     let timeOut = 5000;
-    await tryFetch();
+    setTimeout(() => {
+      console.log("5 seconds passed");
+    }, timeOut);
+    timeOut += 5000;
   }
 
-  if (fetched.ok) {
-    console.log(fetched);
-  } else {
-    while (!fetched.ok) {}
-  }
+  // if (fetched.ok) {
+  //   console.log(fetched);
+  // } else {
+  //   while (!fetched.ok) {}
+  // }
 
   // if (fetched.ok) {
   //   console.log(fetched.ok);
