@@ -1,5 +1,27 @@
 import React from "react";
+import { legacy_createStore as createStore } from "redux";
 
+// Redux section
+function todos(state = [], action) {
+  switch (action.type) {
+    case "ADD_TODO":
+      return state.concat([action.text]);
+    default:
+      return state;
+  }
+}
+
+const store = createStore(todos, ["Use Redux"]);
+
+store.dispatch({
+  type: "ADD_TODO",
+  text: "Read the docs",
+});
+
+console.log(store.getState());
+// [ 'Use Redux', 'Read the docs' ]
+
+// Fetch region
 const fetchQuotes = async () => {
   try {
     const fetched = await fetch(
@@ -15,22 +37,23 @@ const fetchQuotes = async () => {
     return false;
   }
 };
-
 (async () => {
   let fetch = await fetchQuotes();
-  // do something
+  // check if fetch is failed
   if (!fetch) {
-    console.log(
-      "Fetch failed! Please check your connection and reload your browser"
+    return console.log(
+      "Fetch failed! Please check your connection and reload this page"
     );
   }
   console.log("Fetch success! ", fetch.quotes);
+  console.log(fetch.quotes[0].quote, "-", fetch.quotes[0].author);
+  // store state into redux below here
 })();
 
-const App = () => (
+const App = (prop) => (
   <div>
     <div id="quote-box">
-      <p id="text">Quote Text</p>
+      <p id="text">Quote</p>
       <p id="author">Quote Author</p>
       <button id="new-quote">New Quote</button>
       <a href="twitter.com/intent/tweet" id="tweet-quote" target="_blank">
@@ -40,11 +63,11 @@ const App = () => (
   </div>
 );
 
-const RandomQuotes = () => {
+const RandomQuotes = (props) => {
   return (
     <fieldset>
       <legend>Random Quotes Generator Section</legend>
-      <App />
+      <App props={props} />
     </fieldset>
   );
 };
