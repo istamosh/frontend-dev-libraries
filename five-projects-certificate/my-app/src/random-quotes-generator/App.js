@@ -1,27 +1,111 @@
 import React from "react";
 import { legacy_createStore as createStore } from "redux";
+import { Provider } from "react-redux";
 
 // Redux section
-function todos(state = [], action) {
+const INSERT = "INSERT";
+const reducer = (state = [], action) => {
   switch (action.type) {
-    case "ADD_TODO":
-      return state.concat([action.text]);
+    case INSERT:
+      return state.concat([...action.quotes]);
     default:
       return state;
   }
+};
+const storeQuotes = (quotes) => ({ type: INSERT, quotes });
+const store = createStore(reducer);
+
+// React-Redux section EXAMPLE
+// Redux:
+const ADD = "ADD";
+
+const addMessage = (message) => {
+  return {
+    type: ADD,
+    message: message,
+  };
+};
+
+const messageReducer = (state = [], action) => {
+  switch (action.type) {
+    case ADD:
+      return [...state, action.message];
+    default:
+      return state;
+  }
+};
+
+// const store = createStore(messageReducer);
+
+// React:
+
+// Change code below this line
+class Presentational extends React.Component {
+  constructor(props) {
+    super(props);
+    // state shouldn't include messages
+    this.state = {
+      input: "",
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.submitMessage = this.submitMessage.bind(this);
+  }
+  handleChange(event) {
+    this.setState({
+      input: event.target.value,
+    });
+  }
+  submitMessage() {
+    // change this part
+    this.props.submitNewMessage(this.state.input);
+    this.setState({
+      input: "",
+    });
+  }
+  // change this.state.messages into this.props.messages
+  render() {
+    return (
+      <div>
+        <h2>Type in a new Message:</h2>
+        <input value={this.state.input} onChange={this.handleChange} />
+        <br />
+        <button onClick={this.submitMessage}>Submit</button>
+        <ul>
+          {this.props.messages.map((message, idx) => {
+            return <li key={idx}>{message}</li>;
+          })}
+        </ul>
+      </div>
+    );
+  }
+}
+// Change code above this line
+
+const mapStateToProps = (state) => {
+  return { messages: state };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    submitNewMessage: (message) => {
+      dispatch(addMessage(message));
+    },
+  };
+};
+
+const Container = connect(mapStateToProps, mapDispatchToProps)(Presentational);
+
+class AppWrapper extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Container />
+      </Provider>
+    );
+  }
 }
 
-const store = createStore(todos, ["Use Redux"]);
-
-store.dispatch({
-  type: "ADD_TODO",
-  text: "Read the docs",
-});
-
-console.log(store.getState());
-// [ 'Use Redux', 'Read the docs' ]
-
-// Fetch region
+// Fetch section
 const fetchQuotes = async () => {
   try {
     const fetched = await fetch(
@@ -45,9 +129,13 @@ const fetchQuotes = async () => {
       "Fetch failed! Please check your connection and reload this page"
     );
   }
-  console.log("Fetch success! ", fetch.quotes);
   console.log(fetch.quotes[0].quote, "-", fetch.quotes[0].author);
-  // store state into redux below here
+
+  // store fetched quotes into redux state here
+  store.dispatch(storeQuotes(fetch.quotes));
+
+  // test the redux store
+  console.log("Let's see here... ", store.getState());
 })();
 
 const App = (prop) => (
