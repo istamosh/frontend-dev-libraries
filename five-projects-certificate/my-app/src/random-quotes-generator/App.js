@@ -138,6 +138,47 @@ const fetchQuotes = async () => {
   console.log("Let's see here... ", store.getState());
 })();
 
+// React section
+class Display extends React.Component {
+  constructor(props) {
+    super(props);
+    // state shouldn't include messages
+    this.state = {
+      quotes: [],
+    };
+    //   this.handleChange = this.handleChange.bind(this);
+    //   this.submitMessage = this.submitMessage.bind(this);
+    // }
+    // handleChange(event) {
+    //   this.setState({
+    //     input: event.target.value,
+    //   });
+    // }
+    // submitMessage() {
+    //   // change this part
+    //   this.props.submitNewMessage(this.state.input);
+    //   this.setState({
+    //     input: "",
+    //   });
+  }
+  // change this.state.messages into this.props.messages
+  render() {
+    return (
+      <div>
+        <h2>Type in a new Message:</h2>
+        <input value={this.state.input} onChange={this.handleChange} />
+        <br />
+        <button onClick={this.submitMessage}>Submit</button>
+        <ul>
+          {this.props.messages.map((message, idx) => {
+            return <li key={idx}>{message}</li>;
+          })}
+        </ul>
+      </div>
+    );
+  }
+}
+
 const App = (prop) => (
   <div>
     <div id="quote-box">
