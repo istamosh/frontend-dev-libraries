@@ -1,6 +1,6 @@
 import React from "react";
 import { legacy_createStore as createStore } from "redux";
-import { Provider } from "react-redux";
+import { Provider, connect, useSelector } from "react-redux";
 
 // Redux section
 const INSERT = "INSERT";
@@ -81,9 +81,9 @@ class Presentational extends React.Component {
 }
 // Change code above this line
 
-const mapStateToProps = (state) => {
-  return { messages: state };
-};
+// const mapStateToProps = (state) => {
+//   return { messages: state };
+// };
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -93,17 +93,17 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(Presentational);
+// const Container = connect(mapStateToProps, mapDispatchToProps)(Presentational);
 
-class AppWrapper extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Container />
-      </Provider>
-    );
-  }
-}
+// class AppWrapper extends React.Component {
+//   render() {
+//     return (
+//       <Provider store={store}>
+//         <Container />
+//       </Provider>
+//     );
+//   }
+// }
 
 // Fetch section
 const fetchQuotes = async () => {
@@ -123,82 +123,84 @@ const fetchQuotes = async () => {
 };
 (async () => {
   let fetch = await fetchQuotes();
-  // check if fetch is failed
   if (!fetch) {
     return console.log(
       "Fetch failed! Please check your connection and reload this page"
     );
   }
-  console.log(fetch.quotes[0].quote, "-", fetch.quotes[0].author);
+  // console.log(fetch.quotes[0].quote, "-", fetch.quotes[0].author);
 
-  // store fetched quotes into redux state here
   store.dispatch(storeQuotes(fetch.quotes));
 
-  // test the redux store
-  console.log("Let's see here... ", store.getState());
+  // console.log("Let's see here... ", store.getState());
 })();
+
+const quotesRandomizer = () => {
+  const getState = store.getState();
+  return getState[Math.floor(Math.random() * (getState.length + 1))];
+};
 
 // React section
 class Display extends React.Component {
   constructor(props) {
     super(props);
-    // state shouldn't include messages
+    // const getQuotes = quotesRandomizer();
     this.state = {
-      quotes: [],
+      quote: "",
+      author: "",
     };
-    //   this.handleChange = this.handleChange.bind(this);
-    //   this.submitMessage = this.submitMessage.bind(this);
-    // }
-    // handleChange(event) {
-    //   this.setState({
-    //     input: event.target.value,
-    //   });
-    // }
-    // submitMessage() {
-    //   // change this part
-    //   this.props.submitNewMessage(this.state.input);
-    //   this.setState({
-    //     input: "",
-    //   });
+
+    this.shuffleQuote = this.shuffleQuote.bind(this);
   }
-  // change this.state.messages into this.props.messages
+  shuffleQuote = () => {
+    const getQuotes = quotesRandomizer();
+
+    this.setState({
+      quote: getQuotes.quote,
+      author: getQuotes.author,
+    });
+  };
   render() {
     return (
-      <div>
-        <h2>Type in a new Message:</h2>
-        <input value={this.state.input} onChange={this.handleChange} />
-        <br />
-        <button onClick={this.submitMessage}>Submit</button>
-        <ul>
-          {this.props.messages.map((message, idx) => {
-            return <li key={idx}>{message}</li>;
-          })}
-        </ul>
-      </div>
+      <App
+        quote={this.state.quote}
+        author={this.state.author}
+        buttonClick={this.shuffleQuote}
+      />
     );
   }
 }
 
-const App = (prop) => (
+const App = (props) => (
   <div>
     <div id="quote-box">
-      <p id="text">Quote</p>
-      <p id="author">Quote Author</p>
-      <button id="new-quote">New Quote</button>
+      <button id="new-quote" onClick={props.buttonClick}>
+        New Quote
+      </button>
       <a href="twitter.com/intent/tweet" id="tweet-quote" target="_blank">
         Tweet It!
       </a>
+      <p id="text">{props.quote}</p>
+      <p id="author">{props.author}</p>
     </div>
   </div>
 );
 
-const RandomQuotes = (props) => {
+// Redux store to react function (for exporting)
+const mapStateToProps = (store) => ({
+  quotes: store.user.quotes,
+});
+
+// export default connect(mapStateToProps)(App);
+
+const RandomQuotes = () => {
   return (
     <fieldset>
       <legend>Random Quotes Generator Section</legend>
-      <App props={props} />
+      <App />
     </fieldset>
   );
 };
 
-export default RandomQuotes;
+// export default RandomQuotes;
+export default Display;

@@ -16,11 +16,17 @@ const Time = () => {
   const date = new Date();
   const hour = date.getHours();
   let timeOfDay =
-    hour < 12 ? "morning" : hour >= 12 && hour < 17 ? "afternoon" : "night";
+    hour < 12
+      ? "morning"
+      : hour >= 12 && hour < 17
+      ? "afternoon"
+      : hour >= 17 && hour < 20
+      ? "evening"
+      : "night";
 
   return (
     <div style={{ backgroundColor: "lightgray" }}>
-      It's about {date.getHours() % 12} o'clock <br />
+      It's about {hour % 12} o'clock <br />
       Good {timeOfDay}!
     </div>
   );
