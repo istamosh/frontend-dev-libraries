@@ -1,0 +1,40 @@
+body {
+  transition: background-color 0.5s;
+}
+
+p {
+  font-family: "Gentium Book Plus", "Times New Roman", Times, serif;
+  font-size: 20px;
+  color: rgb(48, 48, 48);
+}
+
+h1 {
+  font-size: 72px;
+  color: white;
+  text-shadow: 2px 2px rgb(48, 48, 48);
+}
+
+h1:first-of-type {
+  position: absolute;
+  top: 20vh;
+  left: 10vw;
+}
+
+h1:last-of-type {
+  position: absolute;
+  bottom: 20vh;
+  right: 10vw;
+}
+
+a {
+  text-decoration: none;
+  padding-top: 10px;
+}
+
+i {
+  padding-right: 5px;
+}
+
+span {
+  font-size: 10px;
+}/*# sourceMappingURL=style.css.map */
