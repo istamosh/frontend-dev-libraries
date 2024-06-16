@@ -22,26 +22,22 @@ class Presentational extends React.Component {
           height: "50vh",
           margin: "0 auto",
         });
-      //   $("#editor").val(
-      //     ```
-      //         # This is Heading 1
-      //         ## This is Heading 2
-      //         ### This is Heading 3
-      //         [My Github](https://istamosh.github.io/)
-      //         \'This is Inline Code\'
-      //         \`\`\`<div>
-      //         <div>
-      //         <p>Hello world! This is Code Block</p>
-      //         </div>
-      //         </div> \`\`\`
-      //         1. First item
-      //         2. Second item
-      //         3. Third item
-      //         > This is a Blockquote
-      //         ![This is an Image](https://cdn.freecodecamp.org/curriculum/cat-photo-app/relaxing-cat.jpg)
-      //         **This is a Bold Text**
-      //         ```
-      //   );
+      $("#editor").val(
+        "# This is Heading 1\n## This is Heading 2\n### This is Heading 3\n[My Github](https://istamosh.github.io/)\n\
+          'This is Inline Code'\n\
+              ```<div>\n\
+              <div>\n\
+              <p>Hello world! This is Code Block</p>\n\
+              </div>\n\
+              </div> ```\n\
+              1. First item\n\
+              2. Second item\n\
+              3. Third item\n\
+              > This is a Blockquote\n\
+              ![This is an Image](https://cdn.freecodecamp.org/curriculum/cat-photo-app/relaxing-cat.jpg)\n\
+              **This is a Bold Text**\n\
+          "
+      );
     });
   }
   handleChange(e) {
