@@ -4,6 +4,7 @@ import $ from "jquery";
 // import { connect, Provider } from "react-redux";
 import "./styles/style.css";
 import { marked } from "https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.0/lib/marked.esm.js";
+import Prism from "prismjs";
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class Presentational extends React.Component {
   }
   // do every update
   componentDidUpdate() {
-    $(document).ready(function () {});
+    Prism.highlightAll();
   }
   handleChange(e) {
     this.setState({
