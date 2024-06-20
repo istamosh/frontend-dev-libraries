@@ -1,9 +1,15 @@
-$m: rgb(0, 80, 115);
+$m: #d63384;
+$m05: rgba($m, 0.05);
 $m15: rgba($m, 0.15);
 $m50: rgba($m, 0.5);
 
+#app {
+  background-color: lightsteelblue;
+}
+
 #main {
   margin: 0 auto;
+  width: 66vw;
 }
 
 #preview blockquote::before {
@@ -24,7 +30,7 @@ $m50: rgba($m, 0.5);
   margin-top: 10px;
   font-style: italic;
   color: #333;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
 
   background-color: $m15;
@@ -41,6 +47,29 @@ $m50: rgba($m, 0.5);
 }
 
 #editor {
-  width: 80vw;
-  height: 20vw;
+  height: calc(100% - 85px);
+  font-size: 14px;
+  background-color: rgb(210, 230, 255);
+  color: #272822;
+}
+
+.editor-area {
+  height: 50vh;
+  width: 100%;
+}
+#preview {
+  height: 50vh;
+  width: 100%;
+  overflow-y: auto;
+}
+
+#preview > p > code {
+  padding: 5px;
+  border-radius: 0.3em;
+  background-color: $m15;
+}
+
+.arrow {
+  color: magenta;
+  font-weight: 900;
 }

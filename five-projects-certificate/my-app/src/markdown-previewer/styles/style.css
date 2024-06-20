@@ -1,12 +1,17 @@
 @charset "UTF-8";
+#app {
+  background-color: lightsteelblue;
+}
+
 #main {
   margin: 0 auto;
+  width: 66vw;
 }
 
 #preview blockquote::before {
   font-family: Arial;
   content: "“";
-  color: rgba(0, 80, 115, 0.5);
+  color: rgba(214, 51, 132, 0.5);
   font-size: 4em;
   position: relative;
   right: 5px;
@@ -17,14 +22,14 @@
 }
 
 #preview blockquote {
-  border-left: 3px solid rgb(0, 80, 115);
+  border-left: 3px solid #d63384;
   margin-left: 10px;
   margin-top: 10px;
   font-style: italic;
   color: #333;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
-  background-color: rgba(0, 80, 115, 0.15);
+  background-color: rgba(214, 51, 132, 0.15);
 }
 
 #preview blockquote > * {
@@ -39,6 +44,30 @@
 }
 
 #editor {
-  width: 80vw;
-  height: 20vw;
+  height: calc(100% - 85px);
+  font-size: 14px;
+  background-color: rgb(210, 230, 255);
+  color: #272822;
+}
+
+.editor-area {
+  height: 50vh;
+  width: 100%;
+}
+
+#preview {
+  height: 50vh;
+  width: 100%;
+  overflow-y: auto;
+}
+
+#preview > p > code {
+  padding: 5px;
+  border-radius: 0.3em;
+  background-color: rgba(214, 51, 132, 0.15);
+}
+
+.arrow {
+  color: magenta;
+  font-weight: 900;
 }/*# sourceMappingURL=style.css.map */
