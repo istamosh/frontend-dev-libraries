@@ -5,6 +5,18 @@ import $ from "jquery";
 import "./styles/style.css";
 import { marked } from "https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.0/lib/marked.esm.js";
 import Prism from "prismjs";
+import { createStore } from "redux";
+
+const reduxOperation = (state, action) => {
+  switch (action.type) {
+    case "EXEC":
+      return action.text;
+    default:
+      return state;
+  }
+};
+const saveCurrentState = (text) => ({ type: "EXEC", text });
+const store = createStore(reduxOperation);
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -61,6 +73,9 @@ class Presentational extends React.Component {
     $("#preview h2").addClass("border-bottom border-3 rounded-bottom");
     $("#preview h3").addClass("border-bottom border-1 rounded-bottom");
     $("#preview p a").attr("target", "_blank");
+
+    store.dispatch(saveCurrentState(this.state.text));
+    console.log(store.getState());
   }
   handleChange(e) {
     this.setState({
@@ -81,7 +96,7 @@ const Html = (props) => {
     <div id="main">
       <div className="editor-area">
         <h1>.md Previewer</h1>
-        <label for="editor">
+        <label>
           Write your Markdown text here <span className="arrow">&#8628;</span>
         </label>
         <textarea
