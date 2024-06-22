@@ -5,7 +5,9 @@ import $ from "jquery";
 import "./styles/style.css";
 import { marked } from "https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.0/lib/marked.esm.js";
 import Prism from "prismjs";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import { useDebounce } from "use-debounce";
+import logger from "redux-logger";
 
 const reduxOperation = (state, action) => {
   switch (action.type) {
@@ -16,7 +18,7 @@ const reduxOperation = (state, action) => {
   }
 };
 const saveCurrentState = (text) => ({ type: "EXEC", text });
-const store = createStore(reduxOperation);
+const store = createStore(reduxOperation, applyMiddleware(logger));
 
 class Presentational extends React.Component {
   constructor(props) {
@@ -60,6 +62,9 @@ class Presentational extends React.Component {
     this.setState({
       text: "# This is Heading 1\n## This is Heading 2\n### This is Heading 3\n| Syntax      | Description | Test Text     |\n| :---        |    :----:   |          ---: |\n| Header      | Title       | Here's this   |\n| Paragraph   | Text        | And more      |\n\n[My Github](https://istamosh.github.io/) \n\n`This is an Inline Code`\n ```html\n<div>\n\t<div>\n\t\t<p>Hello world! This is Code Block</p>\n\t</div>\n</div>\n```\n1. First item\n2. Second item\n3. Third item \n \n> This is a Blockquote \n> and this is another blockquote! \n \n![This is an Image of a kitten](https://cdn.freecodecamp.org/curriculum/cat-photo-app/relaxing-cat.jpg) \n \n**This is a Bold Text**\n <br> And this is for line breaks <br> `<br> tag`",
     });
+    // setTimeout(() => {
+    //   store.dispatch(saveCurrentState(this.state.text));
+    // }, 1500)
   }
   // do every update
   componentDidUpdate() {
@@ -75,12 +80,12 @@ class Presentational extends React.Component {
     $("#preview p a").attr("target", "_blank");
 
     store.dispatch(saveCurrentState(this.state.text));
-    console.log(store.getState());
   }
   handleChange(e) {
     this.setState({
       text: e.target.value,
     });
+    // useDebounce(store.dispatch(e.target.value), 3000);
   }
   render() {
     return (
