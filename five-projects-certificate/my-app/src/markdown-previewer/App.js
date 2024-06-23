@@ -1,5 +1,4 @@
-import React from "react";
-// import { legacy_createStore as createStore } from "redux";
+import React, { useState } from "react";
 import $ from "jquery";
 // import { connect, Provider } from "react-redux";
 import "./styles/style.css";
@@ -117,6 +116,40 @@ const Html = (props) => {
         id="preview"
         dangerouslySetInnerHTML={{
           __html: marked(props.text, { breaks: true }),
+          // .replace(/&gt;+/g, ">"),
+        }}
+      ></div>
+    </div>
+  );
+};
+
+const UseStatePresentation = () => {
+  const [text, setText] = useState("");
+
+  function handleChange(e) {
+    setText(e.target.value);
+  }
+  // need component lifecycle workaround
+  return (
+    <div id="main">
+      <div className="editor-area">
+        <h1>.md Previewer</h1>
+        <label>
+          Write your Markdown text here <span className="arrow">&#8628;</span>
+        </label>
+        <textarea
+          spellCheck="false"
+          name="editor1"
+          id="editor"
+          onChange={handleChange}
+          value={text}
+          style={{ resize: "none" }}
+        ></textarea>
+      </div>
+      <div
+        id="preview"
+        dangerouslySetInnerHTML={{
+          __html: marked(text, { breaks: true }),
           // .replace(/&gt;+/g, ">"),
         }}
       ></div>
