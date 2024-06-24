@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import $ from "jquery";
 // import { connect, Provider } from "react-redux";
 import "./styles/style.css";
@@ -130,6 +130,14 @@ const UseStatePresentation = () => {
     setText(e.target.value);
   }
   // need component lifecycle workaround
+  useEffect(() => {
+    first;
+
+    return () => {
+      second;
+    };
+  }, [third]);
+
   return (
     <div id="main">
       <div className="editor-area">
