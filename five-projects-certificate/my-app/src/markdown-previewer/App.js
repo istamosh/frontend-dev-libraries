@@ -4,14 +4,16 @@ import $ from "jquery";
 import "./styles/style.css";
 import { marked } from "https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.0/lib/marked.esm.js";
 import Prism from "prismjs";
-import { createStore, applyMiddleware } from "redux";
+import { legacy_createStore as createStore, applyMiddleware } from "redux";
 import { useDebouncedCallback } from "use-debounce";
 import logger from "redux-logger";
 
-const reducer = (state, action) => {
+const reducer = (state = { data: "" }, action) => {
   switch (action.type) {
     case "EXEC":
-      return action.text;
+      let newObj = Object.assign({}, state);
+      newObj.data = action.text;
+      return newObj;
     default:
       return state;
   }
@@ -69,6 +71,13 @@ const Previewer = () => {
         $("#preview").addClass("border border-1 rounded p-2 bg-body shadow");
       });
 
+      const storedData = window.localStorage.getItem(
+        "istamosh_markdown_previewer"
+      );
+      if (storedData !== null) {
+        setText(JSON.parse(storedData).data);
+      }
+
       markdownListener();
       mounted.current = true;
       console.log("component mounted");
@@ -80,6 +89,10 @@ const Previewer = () => {
   // dispatch store after 3s using callback function
   const debounce = useDebouncedCallback((value) => {
     store.dispatch(saveState(value));
+    window.localStorage.setItem(
+      "istamosh_markdown_previewer",
+      JSON.stringify(store.getState())
+    );
   }, 3000);
 
   function handleChange(e) {
