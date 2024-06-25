@@ -47,6 +47,33 @@ const fetchQuotes = async () => {
   store.dispatch(storeQuotes(fetch[1]));
 })();
 
+// Animate.css snippet
+const animateCSS = (element, animation, duration, prefix = "animate__") =>
+  // We create a Promise and return it
+  new Promise((resolve, reject) => {
+    const animationName = `${prefix}${animation}`;
+    const node = document.querySelector(element);
+
+    node.classList.add(
+      `${prefix}animated`,
+      animationName,
+      `${prefix}${duration}`
+    );
+
+    // When the animation ends, we clean the classes and resolve the Promise
+    function handleAnimationEnd(event) {
+      event.stopPropagation();
+      node.classList.remove(
+        `${prefix}animated`,
+        animationName,
+        `${prefix}${duration}`
+      );
+      resolve("Animation ended");
+    }
+
+    node.addEventListener("animationend", handleAnimationEnd, { once: true });
+  });
+
 // React section
 class Display extends React.Component {
   constructor(props) {
@@ -66,9 +93,8 @@ class Display extends React.Component {
       $("#quote-box").addClass(
         "position-absolute top-50 start-50 translate-middle"
       );
-      $("#new-quote")
-        .addClass("btn btn-primary btn-lg")
-        .addClass("animate__animated animate__heartBeat");
+      $("#new-quote").addClass("btn btn-primary btn-lg");
+      // .addClass("animate__animated animate__heartBeat");
       $("#text").addClass("text-start");
       $("#author").addClass("text-end");
       $("#tweet-quote").addClass("text-center");
@@ -82,6 +108,20 @@ class Display extends React.Component {
         $("#tweet-quote").css({ color: randomColor });
       });
     });
+
+    animateCSS("#new-quote", "heartBeat", "fast");
+
+    setTimeout(() => {
+      this.setState({
+        quoteState:
+          store.getState()[
+            Math.floor(Math.random() * this.props.quotes.length)
+          ],
+      });
+    }, 1000);
+  }
+  componentDidUpdate() {
+    animateCSS("#new-quote", "headShake", "faster");
   }
   shuffleQuote() {
     this.setState({
