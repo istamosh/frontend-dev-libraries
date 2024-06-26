@@ -70,4 +70,8 @@
 .arrow {
   color: magenta;
   font-weight: 900;
+}
+
+#markdown-link {
+  cursor: help;
 }/*# sourceMappingURL=style.css.map */

@@ -5,7 +5,7 @@ import "./styles/style.css";
 import { marked } from "https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.0/lib/marked.esm.js";
 import Prism from "prismjs";
 import { legacy_createStore as createStore, applyMiddleware } from "redux";
-import { useDebouncedCallback } from "use-debounce";
+// import { useDebouncedCallback } from "use-debounce";
 import logger from "redux-logger";
 
 const reducer = (state = { data: "" }, action) => {
@@ -32,6 +32,18 @@ const markdownListener = () => {
   $("#preview h2").addClass("border-bottom border-3 rounded-bottom");
   $("#preview h3").addClass("border-bottom border-1 rounded-bottom");
   $("#preview p a").attr("target", "_blank");
+};
+
+// custom debounce function
+const debounce = (func, wait = 0) => {
+  let timeoutID = null;
+
+  return (...args) => {
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
 };
 
 const Previewer = () => {
@@ -63,6 +75,16 @@ const Previewer = () => {
               e.preventDefault();
             }
           })
+          .on(
+            "input",
+            debounce(({ target }) => {
+              store.dispatch(saveState(target.value));
+              window.localStorage.setItem(
+                "istamosh_markdown_previewer",
+                JSON.stringify(store.getState())
+              );
+            }, 3000)
+          )
           .addClass("form-control font-monospace lh-sm text-nowrap shadow");
         $(".editor-area label").addClass(
           "form-label m-0 ms-2 d-block text-truncate text-white lead fs-6"
@@ -80,31 +102,29 @@ const Previewer = () => {
 
       markdownListener();
       mounted.current = true;
-      console.log("component mounted");
     } else {
       markdownListener();
     }
   });
 
-  // dispatch store after 3s using callback function
-  const debounce = useDebouncedCallback((value) => {
-    store.dispatch(saveState(value));
-    window.localStorage.setItem(
-      "istamosh_markdown_previewer",
-      JSON.stringify(store.getState())
-    );
-  }, 3000);
-
   function handleChange(e) {
     setText(e.target.value);
-    debounce(e.target.value);
   }
   return (
     <div id="main">
       <div className="editor-area">
         <h1>.md Previewer</h1>
         <label>
-          Write your Markdown text here <span className="arrow">&#8628;</span>
+          Write your{" "}
+          <a
+            id="markdown-link"
+            href="https://www.markdowntutorial.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Markdown
+          </a>{" "}
+          text here <span className="arrow">&#8628;</span>
         </label>
         <textarea
           spellCheck="false"
