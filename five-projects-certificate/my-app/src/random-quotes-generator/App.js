@@ -1,8 +1,9 @@
 import React from "react";
-import { legacy_createStore as createStore } from "redux";
+import { applyMiddleware, legacy_createStore as createStore } from "redux";
 import $ from "jquery";
 import { connect, Provider } from "react-redux";
 import "./styles/style.css";
+import logger from "redux-logger";
 
 // Redux section
 const reducer = (state = [], action) => {
@@ -14,7 +15,7 @@ const reducer = (state = [], action) => {
   }
 };
 const storeQuotes = (quotes) => ({ type: "INSERT", quotes });
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(logger));
 
 // Fetch section
 const fetchQuotes = async () => {
