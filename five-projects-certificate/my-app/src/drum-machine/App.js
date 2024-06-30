@@ -18,6 +18,15 @@ const audioSamples = {
     "https://cdn.freecodecamp.org/testable-projects-fcc/audio/Cev_H2.mp3",
 };
 
+const DrumPad = (i) => {
+  return (
+    <div class="drum-pad" id={`drum-pad-${i}`}>
+      {key}
+      <input type="button" value="Play" onClick={play} />
+    </div>
+  );
+};
+
 const DrumMachine = () => {
   const play = () => {
     new Audio(audioSamples.heaterOne).play();
