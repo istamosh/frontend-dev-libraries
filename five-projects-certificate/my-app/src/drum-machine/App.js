@@ -1,73 +1,45 @@
 import React from "react";
 
-const audioSamples = {
-  heaterOne:
-    "https://cdn.freecodecamp.org/testable-projects-fcc/audio/Heater-1.mp3",
-  heaterTwo:
-    "https://cdn.freecodecamp.org/testable-projects-fcc/audio/Heater-2.mp3",
-  heaterThree:
-    "https://cdn.freecodecamp.org/testable-projects-fcc/audio/Heater-3.mp3",
-  heaterFour:
-    "https://cdn.freecodecamp.org/testable-projects-fcc/audio/Heater-4_1.mp3",
-  clap: "https://cdn.freecodecamp.org/testable-projects-fcc/audio/Heater-6.mp3",
-  openHH: "https://cdn.freecodecamp.org/testable-projects-fcc/audio/Dsc_Oh.mp3",
-  kickAndHat:
-    "https://cdn.freecodecamp.org/testable-projects-fcc/audio/Kick_n_Hat.mp3",
-  kick: "https://cdn.freecodecamp.org/testable-projects-fcc/audio/RP4_KICK_1.mp3",
-  closedHH:
-    "https://cdn.freecodecamp.org/testable-projects-fcc/audio/Cev_H2.mp3",
-};
-
-const DrumPad = (i) => {
-  return (
-    <div class="drum-pad" id={`drum-pad-${i}`}>
-      {key}
-      <input type="button" value="Play" onClick={play} />
-    </div>
-  );
-};
+const DrumPad = (props) => (
+  <input
+    className="drum-pad"
+    id={`drum-pad-${props.number}`}
+    type="button"
+    value={`${props.string}`}
+    onClick={() => {
+      new Audio(props.audio).play();
+    }}
+  />
+);
 
 const DrumMachine = () => {
-  const play = () => {
-    new Audio(audioSamples.heaterOne).play();
-  };
+  let audioSamples = [
+    { link: "Heater-1.mp3", key: "Q" },
+    { link: "Heater-2.mp3", key: "W" },
+    { link: "Heater-3.mp3", key: "E" },
+    { link: "Heater-4_1.mp3", key: "A" },
+    { link: "Heater-6.mp3", key: "S" },
+    { link: "Dsc_Oh.mp3", key: "D" },
+    { link: "Kick_n_Hat.mp3", key: "Z" },
+    { link: "RP4_KICK_1.mp3", key: "X" },
+    { link: "Cev_H2.mp3", key: "C" },
+  ];
+
+  const drumPads = [];
+  audioSamples.forEach((val, i) => {
+    drumPads.push(
+      <DrumPad
+        number={i + 1}
+        audio={`https://cdn.freecodecamp.org/testable-projects-fcc/audio/${val.link}`}
+        string={val.key}
+      />
+    );
+  });
   return (
     <>
       <div id="drum-machine">
         <div id="display"></div>
-        <div class="drum-pad" id="drum-pad-1">
-          Q<input type="button" value="PLAY" onClick={play}></input>
-          {/* <audio
-            id="q"
-            class="clip"
-            src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/Heater-1.mp3"
-            type="audio/mpeg"
-          ></audio>{" "} */}
-        </div>
-        <div class="drum-pad" id="drum-pad-2">
-          W<audio class="clip" src=""></audio>{" "}
-        </div>
-        <div class="drum-pad" id="drum-pad-3">
-          E<audio class="clip" src=""></audio>{" "}
-        </div>
-        <div class="drum-pad" id="drum-pad-4">
-          A<audio class="clip" src=""></audio>{" "}
-        </div>
-        <div class="drum-pad" id="drum-pad-5">
-          S<audio class="clip" src=""></audio>{" "}
-        </div>
-        <div class="drum-pad" id="drum-pad-6">
-          D<audio class="clip" src=""></audio>{" "}
-        </div>
-        <div class="drum-pad" id="drum-pad-7">
-          Z<audio class="clip" src=""></audio>{" "}
-        </div>
-        <div class="drum-pad" id="drum-pad-8">
-          X<audio class="clip" src=""></audio>{" "}
-        </div>
-        <div class="drum-pad" id="drum-pad-9">
-          C<audio class="clip" src=""></audio>{" "}
-        </div>
+        {drumPads}
       </div>
     </>
   );
