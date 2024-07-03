@@ -2,15 +2,19 @@ import React, { useEffect, useRef } from "react";
 import $ from "jquery";
 
 const DrumPad = (props) => (
-  <input
-    className="drum-pad"
-    id={`drum-pad-${props.number}`}
-    type="button"
-    value={props.string}
-    onClick={() => {
-      new Audio(props.audio).play();
-    }}
-  />
+  // <input
+  //   className="drum-pad"
+  //   id={`drum-pad-${props.number}`}
+  //   type="button"
+  //   value={props.string}
+  //   onClick={() => {
+  //     new Audio(props.audio).play();
+  //   }}
+  // />
+  <div className="drum-pad" id={props.id}>
+    <audio className="clip" src={props.audio} id={props.string}></audio>
+    {props.string}
+  </div>
 );
 
 const DrumMachine = () => {
@@ -27,10 +31,11 @@ const DrumMachine = () => {
   ];
 
   const drumPads = [];
-  audioSamples.forEach((val, i) => {
+  audioSamples.forEach((val) => {
     drumPads.push(
       <DrumPad
-        number={i + 1}
+        // number={i + 1}
+        id={val.link.substring(0, val.link.length - 4)}
         audio={`https://cdn.freecodecamp.org/testable-projects-fcc/audio/${val.link}`}
         string={val.key}
         key={val.link.substring(0, val.link.length - 4)}
@@ -38,19 +43,16 @@ const DrumMachine = () => {
     );
   });
 
+  // const play = (arg) => {
+  //   document.querySelector("audio").play();
+  // };
+
   const mounted = useRef();
   useEffect(() => {
     if (!mounted.current) {
       $(document).ready(function () {
-        $(document).on("keydown", function ({ code }) {
-          const found =
-            audioSamples.find((element) => element.key === code.substring(3)) ||
-            null;
-          if (found) {
-            new Audio(
-              `https://cdn.freecodecamp.org/testable-projects-fcc/audio/${found.link}`
-            ).play();
-          }
+        $(".drum-pad").each((i, obj) => {
+          console.log(obj);
         });
       });
       mounted.current = true;
