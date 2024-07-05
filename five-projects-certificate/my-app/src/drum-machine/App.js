@@ -2,21 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import $ from "jquery";
 
 const DrumPad = (props) => (
-  // <input
-  //   className="drum-pad"
-  //   id={`drum-pad-${props.number}`}
-  //   type="button"
-  //   value={props.string}
-  //   onClick={() => {
-  //     new Audio(props.audio).play();
-  //   }}
-  // />
   <div
     className="drum-pad"
     id={props.id}
-    onClick={() => {
-      $(`#${props.string}`)[0].play();
-    }}
+    // onClick={(e) => {
+    //   $(`#${props.string}`)[0].play();
+    //   console.log(e.target.id);
+    // }}
+    onClick={props.trigger}
   >
     <audio className="clip" src={props.audio} id={props.string}></audio>
     {props.string}
@@ -26,7 +19,7 @@ const DrumPad = (props) => (
 const DrumMachine = () => {
   const [text, setText] = useState("");
 
-  let audioSamples = [
+  const audioSamples = [
     { link: "Heater-1.mp3", key: "Q" },
     { link: "Heater-2.mp3", key: "W" },
     { link: "Heater-3.mp3", key: "E" },
@@ -42,55 +35,52 @@ const DrumMachine = () => {
   audioSamples.forEach((val) => {
     drumPads.push(
       <DrumPad
-        // number={i + 1}
+        key={val.link.substring(0, val.link.length - 4)}
         id={val.link.substring(0, val.link.length - 4)}
         audio={`https://cdn.freecodecamp.org/testable-projects-fcc/audio/${val.link}`}
         string={val.key}
-        key={val.link.substring(0, val.link.length - 4)}
+        trigger={hitDrum}
       />
     );
   });
 
-  const handleKeyboard = ({ key }) => {
-    const keypress = key.toUpperCase();
-    const audio = document.getElementById(keypress);
+  function hitDrum({ key, target }) {
+    const keypress = key || "click!";
+    // function catchUndefined(fn, defaultVal = "undefined.") {
+    //   try {
+    //     return fn();
+    //   } catch (e) {
+    //     return defaultVal;
+    //   }
+    // }
+    // const audio = document.getElementById(keypress);
 
-    if (audio) {
-      audio.pause();
-      audio.play();
-      setText(audio.src.substring(57, audio.src.length - 4));
-    }
-  };
+    // if (audio) {
+    //   // audio.pause();
+    //   audio.play();
+    //   setText(audio.src.substring(57, audio.src.length - 4));
+    // }
+    // console.log(
+    //   catchUndefined(() => {
+    //     key.toUpperCase();
+    //   })
+    // );
+    console.log(`keyboard: ${keypress.toUpperCase()}`);
+    console.log(`click: ${target.id}`);
+  }
 
   const mounted = useRef();
   useEffect(() => {
     if (!mounted.current) {
-      // $(document).ready(() => {
-      //   $(".drum-pad").each((i, obj) => {
-      //     obj.addEventListener("click", (e) => {
-      //       e.preventDefault();
-      //       const hehe = obj.querySelector("audio");
-      //       var isPlaying =
-      //         hehe.currentTime > 0 &&
-      //         !hehe.paused &&
-      //         !hehe.ended &&
-      //         hehe.readyState > hehe.HAVE_CURRENT_DATA;
-
-      //       if (!isPlaying) {
-      //         hehe.play();
-      //       }
-      //     });
-      //   });
-      // });
-      document.addEventListener("keydown", handleKeyboard);
+      document.addEventListener("keydown", hitDrum);
       mounted.current = true;
       return () => {
-        document.removeEventListener("keydown", handleKeyboard);
+        document.removeEventListener("keydown", hitDrum);
       };
     } else {
-      document.addEventListener("keydown", handleKeyboard);
+      document.addEventListener("keydown", hitDrum);
       return () => {
-        document.removeEventListener("keydown", handleKeyboard);
+        document.removeEventListener("keydown", hitDrum);
       };
     }
   });
