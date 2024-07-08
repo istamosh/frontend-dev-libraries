@@ -9,7 +9,7 @@ const DrumPad = (props) => (
 );
 
 const DrumMachine = () => {
-  const [text, setText] = useState("");
+  const [text, setText] = useState("-");
 
   const mounted = useRef();
   useEffect(() => {
@@ -25,6 +25,30 @@ const DrumMachine = () => {
           audios[el].load();
           audios[el].muted = true;
         });
+
+      $(function () {
+        $("body").addClass(
+          "d-flex justify-content-center align-items-center vh-100"
+        );
+        $("#drum-machine")
+          .css({
+            "max-width": "500px",
+            "max-height": "500px",
+            width: "100%",
+            height: "100%",
+            //
+          })
+          .addClass("bg-light border d-flex flex-column");
+        $(".pad-container").css({
+          display: "grid",
+          "grid-template-columns": "repeat(3, 1fr)",
+          "grid-template-rows": "repeat(3, 1fr)",
+          gap: "10px",
+        });
+        $("#drum-machine, .drum-pad").css({
+          "text-align": "center",
+        });
+      });
 
       mounted.current = true;
       return () => {
@@ -83,7 +107,7 @@ const DrumMachine = () => {
   return (
     <div id="drum-machine">
       <div id="display">{text}</div>
-      {drumPads}
+      <div class="pad-container">{drumPads}</div>
     </div>
   );
 };
