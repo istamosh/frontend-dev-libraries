@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import $ from "jquery";
+import "./styles/style.css";
 
 const DrumPad = (props) => (
   <div className="drum-pad" id={props.id} onClick={props.trigger}>
@@ -36,18 +37,22 @@ const DrumMachine = () => {
             "max-height": "500px",
             width: "100%",
             height: "100%",
-            //
           })
           .addClass("bg-light border d-flex flex-column");
         $(".pad-container").css({
           display: "grid",
           "grid-template-columns": "repeat(3, 1fr)",
           "grid-template-rows": "repeat(3, 1fr)",
-          gap: "10px",
         });
-        $("#drum-machine, .drum-pad").css({
+        $("#display").css({
           "text-align": "center",
         });
+        $(".drum-pad")
+          .css({
+            "text-align": "center",
+            padding: "25px 30px",
+          })
+          .addClass("border btn btn-dark btn-like-div");
       });
 
       mounted.current = true;
@@ -88,6 +93,11 @@ const DrumMachine = () => {
         audioInstance.pause();
         audioInstance.src = "";
       }, 1000);
+
+      $(audio).parent().addClass("button-animation");
+      setTimeout(() => {
+        $(audio).parent().removeClass("button-animation");
+      }, 100);
     }
   };
 
@@ -107,7 +117,7 @@ const DrumMachine = () => {
   return (
     <div id="drum-machine">
       <div id="display">{text}</div>
-      <div class="pad-container">{drumPads}</div>
+      <div className="pad-container">{drumPads}</div>
     </div>
   );
 };
