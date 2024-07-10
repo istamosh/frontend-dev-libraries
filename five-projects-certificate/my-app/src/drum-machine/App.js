@@ -44,15 +44,17 @@ const DrumMachine = () => {
           "grid-template-columns": "repeat(3, 1fr)",
           "grid-template-rows": "repeat(3, 1fr)",
         });
-        $("#display").css({
-          "text-align": "center",
-        });
+        $("#display")
+          .css({
+            "text-align": "center",
+          })
+          .addClass("p-2 bg-primary bg-gradient text-white rounded");
         $(".drum-pad")
           .css({
             "text-align": "center",
             padding: "25px 30px",
           })
-          .addClass("border btn btn-dark btn-like-div");
+          .addClass("border btn btn-dark bg-gradient btn-like-div");
       });
 
       mounted.current = true;
@@ -68,15 +70,15 @@ const DrumMachine = () => {
   });
 
   const audioSamples = [
-    { link: "Heater-1", key: "Q" },
-    { link: "Heater-2", key: "W" },
-    { link: "Heater-3", key: "E" },
-    { link: "Heater-4_1", key: "A" },
-    { link: "Heater-6", key: "S" },
-    { link: "Dsc_Oh", key: "D" },
-    { link: "Kick_n_Hat", key: "Z" },
-    { link: "RP4_KICK_1", key: "X" },
-    { link: "Cev_H2", key: "C" },
+    { link: "Heater-1", key: "Q", instrumentName: "Heater I" },
+    { link: "Heater-2", key: "W", instrumentName: "Heater II" },
+    { link: "Heater-3", key: "E", instrumentName: "Heater III" },
+    { link: "Heater-4_1", key: "A", instrumentName: "Heater IV" },
+    { link: "Heater-6", key: "S", instrumentName: "Clap" },
+    { link: "Dsc_Oh", key: "D", instrumentName: "Open HH" },
+    { link: "Kick_n_Hat", key: "Z", instrumentName: "Kick n' Hat" },
+    { link: "RP4_KICK_1", key: "X", instrumentName: "Kick" },
+    { link: "Cev_H2", key: "C", instrumentName: "Closed HH" },
   ];
 
   const hitDrum = ({ key, target }) => {
@@ -87,7 +89,7 @@ const DrumMachine = () => {
       const audioInstance = new Audio(audio.src);
       audioInstance.currentTime = 0;
       audioInstance.play();
-      setText(audio.src.substring(57, audio.src.length - 4));
+      setText($(audio).parent().attr("id").toUpperCase().replace(/-/g, " "));
 
       setTimeout(() => {
         audioInstance.pause();
@@ -105,8 +107,8 @@ const DrumMachine = () => {
   audioSamples.forEach((val) => {
     drumPads.push(
       <DrumPad
-        key={val.link.substring(0, val.link.length)}
-        id={val.link.substring(0, val.link.length)}
+        key={val.instrumentName.replace(/\s+/g, "-").toLowerCase()}
+        id={val.instrumentName.replace(/\s+/g, "-").toLowerCase()}
         audio={`https://cdn.freecodecamp.org/testable-projects-fcc/audio/${val.link}.mp3`}
         string={val.key}
         trigger={hitDrum}
@@ -122,4 +124,24 @@ const DrumMachine = () => {
   );
 };
 
-export default DrumMachine;
+const Wrapper = () => {
+  const [volume, setVolume] = useState("");
+  return (
+    <>
+      <h1>Soundboard</h1>
+      <DrumMachine />
+      <input
+        type="range"
+        name="volume"
+        id="volume-control"
+        min="0"
+        max="1"
+        step="0.01"
+        value={volume}
+        onChange={(e) => setVolume(e.target.value)}
+      />
+    </>
+  );
+};
+
+export default Wrapper;
