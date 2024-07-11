@@ -4,7 +4,8 @@ import "./App.css";
 // import Tutorial from "./tutorial-phase/App";
 // import RandomQuotes from "./random-quotes-generator/App";
 // import MarkdownPreviewer from "./markdown-previewer/App";
-import DrumMachine from "./drum-machine/App";
+// import DrumMachine from "./drum-machine/App";
+import Calculator from "./calculator/App";
 
 function Main() {
   return (
@@ -12,7 +13,8 @@ function Main() {
       {/* <Tutorial /> */}
       {/* <RandomQuotes /> */}
       {/* <MarkdownPreviewer /> */}
-      <DrumMachine />
+      {/* <DrumMachine /> */}
+      <Calculator />
     </>
   );
 }
