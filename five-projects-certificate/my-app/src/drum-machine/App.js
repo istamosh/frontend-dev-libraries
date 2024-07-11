@@ -11,6 +11,7 @@ const DrumPad = (props) => (
 
 const DrumMachine = () => {
   const [text, setText] = useState("-");
+  const [volume, setVolume] = useState("0.5");
 
   const mounted = useRef();
   useEffect(() => {
@@ -33,12 +34,13 @@ const DrumMachine = () => {
         );
         $("#drum-machine")
           .css({
-            "max-width": "500px",
+            "max-width": "230px",
             "max-height": "500px",
             width: "100%",
             height: "100%",
           })
           .addClass("bg-light border d-flex flex-column");
+        $("#drum-machine > h1").addClass("text-wrap text-center lh-1");
         $(".pad-container").css({
           display: "grid",
           "grid-template-columns": "repeat(3, 1fr)",
@@ -48,13 +50,15 @@ const DrumMachine = () => {
           .css({
             "text-align": "center",
           })
-          .addClass("p-2 bg-primary bg-gradient text-white rounded");
+          .addClass("p-2 bg-primary text-white rounded");
         $(".drum-pad")
           .css({
             "text-align": "center",
             padding: "25px 30px",
           })
           .addClass("border btn btn-dark bg-gradient btn-like-div");
+        $("#drum-machine > label").addClass("text-center text-primary");
+        $("#volume-control").addClass("form-range");
       });
 
       mounted.current = true;
@@ -87,6 +91,7 @@ const DrumMachine = () => {
       audio.play();
       // instantiating the audio to prevent error
       const audioInstance = new Audio(audio.src);
+      audioInstance.volume = volume;
       audioInstance.currentTime = 0;
       audioInstance.play();
       setText($(audio).parent().attr("id").toUpperCase().replace(/-/g, " "));
@@ -118,18 +123,12 @@ const DrumMachine = () => {
 
   return (
     <div id="drum-machine">
+      <h1>Istamosh Drumboard</h1>
       <div id="display">{text}</div>
       <div className="pad-container">{drumPads}</div>
-    </div>
-  );
-};
-
-const Wrapper = () => {
-  const [volume, setVolume] = useState("");
-  return (
-    <>
-      <h1>Soundboard</h1>
-      <DrumMachine />
+      <label htmlFor="volume-control" className="volume-label">
+        - Volume Control -
+      </label>
       <input
         type="range"
         name="volume"
@@ -138,10 +137,10 @@ const Wrapper = () => {
         max="1"
         step="0.01"
         value={volume}
-        onChange={(e) => setVolume(e.target.value)}
+        onChange={({ target }) => setVolume(target.value)}
       />
-    </>
+    </div>
   );
 };
 
-export default Wrapper;
+export default DrumMachine;
