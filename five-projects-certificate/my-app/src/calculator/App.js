@@ -42,9 +42,9 @@ const Engine = () => {
             "grid-template-rows": "repeat(3, 1fr)",
           })
           .addClass("text-center gap-1");
-        $(".clickables > div").addClass(
-          "btn btn-dark bg-gradient btn-like-div"
-        );
+        $(".clickables")
+          .children("div[id]")
+          .addClass("btn btn-dark bg-gradient btn-like-div");
       });
 
       mounted.current = true;
@@ -53,6 +53,10 @@ const Engine = () => {
       return () => {};
     }
   });
+
+  const buttonPress = ({ key, target }) => {
+    console.log(`keypress: ${key}, click: ${target.innerText}`);
+  };
 
   let displayButtons = [<div></div>, <div></div>];
   buttons.forEach((el) => {
