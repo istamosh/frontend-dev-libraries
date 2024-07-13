@@ -46,22 +46,27 @@ const Engine = () => {
           .children("div[id]")
           .addClass("btn btn-dark bg-gradient btn-like-div");
       });
-
+      document.addEventListener("keydown", buttonPress);
       mounted.current = true;
-      return () => {};
+      return () => {
+        document.removeEventListener("keydown", buttonPress);
+      };
     } else {
-      return () => {};
+      document.addEventListener("keydown", buttonPress);
+      return () => {
+        document.removeEventListener("keydown", buttonPress);
+      };
     }
   });
 
   const buttonPress = ({ key, target }) => {
-    console.log(`keypress: ${key}, click: ${target.innerText}`);
+    console.log(`keypress: ${key}, click: ${target.innerText[0]}`);
   };
 
-  let displayButtons = [<div></div>, <div></div>];
+  let displayButtons = [<div key="empty1"></div>, <div key="empty2"></div>];
   buttons.forEach((el) => {
     displayButtons.push(
-      <div id={el.id} key={el.id}>
+      <div id={el.id} key={el.id} onClick={buttonPress}>
         {el.label}
       </div>
     );
