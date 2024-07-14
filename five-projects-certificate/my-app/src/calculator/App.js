@@ -2,24 +2,24 @@ import React, { useState, useRef, useEffect } from "react";
 import $ from "jquery";
 
 const buttons = [
-  { id: "clear", char: "C", label: "C" },
-  { id: "divide", char: "/", label: "÷" },
-  { id: "seven", char: "7", label: "7" },
-  { id: "eight", char: "8", label: "8" },
-  { id: "nine", char: "9", label: "9" },
-  { id: "multiply", char: "*", label: "×" },
-  { id: "four", char: "4", label: "4" },
-  { id: "five", char: "5", label: "5" },
-  { id: "six", char: "6", label: "6" },
-  { id: "subtract", char: "-", label: "-" },
-  { id: "one", char: "1", label: "1" },
-  { id: "two", char: "2", label: "2" },
-  { id: "three", char: "3", label: "3" },
-  { id: "add", char: "+", label: "+" },
-  { id: "negate", char: "+/-", label: "+/-" },
-  { id: "zero", char: "0", label: "0" },
-  { id: "decimal", char: ".", label: "." },
-  { id: "equals", char: "=", label: "=" },
+  { id: "clear", key: "c", label: "C" },
+  { id: "divide", key: "/", label: "÷" },
+  { id: "seven", key: "7", label: "7" },
+  { id: "eight", key: "8", label: "8" },
+  { id: "nine", key: "9", label: "9" },
+  { id: "multiply", key: "*", label: "×" },
+  { id: "four", key: "4", label: "4" },
+  { id: "five", key: "5", label: "5" },
+  { id: "six", key: "6", label: "6" },
+  { id: "subtract", key: "-", label: "-" },
+  { id: "one", key: "1", label: "1" },
+  { id: "two", key: "2", label: "2" },
+  { id: "three", key: "3", label: "3" },
+  { id: "add", key: "+", label: "+" },
+  { id: "negate", key: "n", label: "+/-" },
+  { id: "zero", key: "0", label: "0" },
+  { id: "decimal", key: ".", label: "." },
+  { id: "equals", key: "=", label: "=" },
 ];
 
 const Engine = () => {
@@ -60,7 +60,29 @@ const Engine = () => {
   });
 
   const buttonPress = ({ key, target }) => {
-    console.log(`keypress: ${key}, click: ${target.innerText[0]}`);
+    let input;
+    if (key) {
+      const selectedButton = buttons.find((el) => key.toLowerCase() === el.key);
+      if (selectedButton) {
+        input = selectedButton.id;
+      }
+    } else {
+      input = target.id;
+    }
+
+    const assigned =
+      input !== undefined ? buttons.find((el) => el.id === input).key : "";
+    switch (assigned) {
+      case "c":
+        console.log("cleared");
+        break;
+      case "n":
+        console.log("negated");
+        break;
+
+      default:
+        setResult([...result, assigned]);
+    }
   };
 
   let displayButtons = [<div key="empty1"></div>, <div key="empty2"></div>];
@@ -78,7 +100,7 @@ const Engine = () => {
         name="result"
         id="display"
         value={result}
-        onChange={({ target }) => setResult(target.value)}
+        // onChange={({ target }) => setResult(target.value)}
         readOnly
         disabled
       />
