@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import $ from "jquery";
+import { evaluate } from "mathjs";
 
 const buttons = [
   { id: "clear", key: "c", label: "C" },
@@ -74,14 +75,32 @@ const Engine = () => {
       input !== undefined ? buttons.find((el) => el.id === input).key : "";
     switch (assigned) {
       case "c":
-        console.log("cleared");
+        setResult("0");
         break;
       case "n":
-        console.log("negated");
+        setResult((prevValue) =>
+          Array.from(prevValue)[0] === "-"
+            ? prevValue.slice(1)
+            : "-" + prevValue
+        );
         break;
-
+      case ".":
+        setResult((prevValue) =>
+          prevValue.slice(-1) !== "." ? prevValue + "." : prevValue
+        );
+        break;
+      case "=":
+        setResult((prevValue) => {
+          const filteredComma = prevValue.replace(/\.+/g, ".");
+          return evaluate(filteredComma);
+        });
+        break;
+      case "":
+        break;
       default:
-        setResult([...result, assigned]);
+        setResult((prevValue) =>
+          prevValue === "0" ? assigned : prevValue + assigned
+        );
     }
   };
 
