@@ -117,8 +117,12 @@ const Engine = () => {
             : "-" + prevValue
         );
         break;
+      case ".":
+        setResult((prevValue) =>
+          /([/+\-*])?(\d+)?\./.test(prevValue) ? prevValue : prevValue + "."
+        );
+        break;
       case "=":
-        // setResult((prevValue) => parseFloat(evaluate(cleanValue(prevValue))));
         setResult((prevValue) => evaluate(prevValue));
         break;
       case "":
