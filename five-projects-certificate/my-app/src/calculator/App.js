@@ -24,7 +24,8 @@ const buttons = [
 ];
 
 const Engine = () => {
-  const [result, setResult] = useState("0");
+  const [memory, setMemory] = useState("");
+  const [input, setInput] = useState("0");
 
   const mounted = useRef();
   useEffect(() => {
@@ -33,9 +34,9 @@ const Engine = () => {
         $("body").addClass(
           "d-flex justify-content-center align-items-center vh-100"
         );
-        $("#display")
-          .addClass("form-text text-end w-100")
-          .css({ color: "blue" });
+        $("#app").addClass("d-flex flex-column");
+        $("#memory-display").addClass("form-text text-end");
+        $("#display").addClass("form-text text-end").css({ color: "blue" });
         $(".clickables")
           .css({
             display: "grid",
@@ -60,39 +61,6 @@ const Engine = () => {
     }
   });
 
-  const cleanValue = (params) => {
-    // split the numbers and operators into an array
-    let separatedSegments = params.split(/([+\-*/])/);
-
-    const transformString = (str) => {
-      // check if it's the operator
-      if (/[+\-/*]/.test(str)) {
-        return str;
-      }
-
-      let firstCommaIndex = str.indexOf(".") + 1;
-      let substringBefore = str.substring(0, firstCommaIndex);
-      // store trailing char after comma, remove all commas, and remove trailing zeroes until end
-      let substringAfter = str
-        .substring(firstCommaIndex)
-        .replace(/\./g, "")
-        .replace(/0+$/, "");
-      // console.log(substringBefore + ", " + substringAfter);
-      // concat the processed strings, if the 2nd half is empty then remove the first comma of 1st string
-      let concatenated =
-        substringAfter !== ""
-          ? substringBefore + substringAfter
-          : substringBefore + "0";
-      return concatenated.startsWith(".") ? "0" + concatenated : concatenated;
-    };
-
-    // process segments using above function, then join, then accept last operator if it have consecutive operators
-    return separatedSegments
-      .map((el) => transformString(el))
-      .join("")
-      .replace(/([+\-/*]){2,}/g, (match) => match.slice(-1));
-  };
-
   const buttonPress = ({ key, target }) => {
     let input;
     if (key) {
@@ -108,27 +76,33 @@ const Engine = () => {
       input !== undefined ? buttons.find((el) => el.id === input).key : "";
     switch (assigned) {
       case "c":
-        setResult("0");
+        setMemory("");
+        setInput("0");
         break;
       case "n":
-        setResult((prevValue) =>
-          Array.from(prevValue)[0] === "-"
-            ? prevValue.slice(1)
-            : "-" + prevValue
+        setInput((prevValue) =>
+          memory === ""
+            ? Array.from(prevValue)[0] === "-"
+              ? prevValue.slice(1)
+              : "-" + prevValue
+            : prevValue
         );
         break;
       case ".":
-        setResult((prevValue) =>
+        // this section uses proper regex as the checker
+        setInput((prevValue) =>
           /([/+\-*])?(\d+)?\./.test(prevValue) ? prevValue : prevValue + "."
         );
         break;
       case "=":
-        setResult((prevValue) => evaluate(prevValue));
+        // this section will utilize memory variable for evaluation
+        setInput((prevValue) => evaluate(prevValue));
         break;
       case "":
         break;
       default:
-        setResult((prevValue) =>
+        // this section will handle other inputs like usual
+        setInput((prevValue) =>
           prevValue === "0" ? assigned : prevValue + assigned
         );
     }
@@ -146,13 +120,21 @@ const Engine = () => {
     <>
       <input
         type="text"
-        name="result"
-        id="display"
-        value={result}
-        // onChange={({ target }) => setResult(target.value)}
+        name="memory"
+        id="memory-display"
+        value={memory}
         readOnly
         disabled
       />
+      <input
+        type="text"
+        name="input"
+        id="display"
+        value={input}
+        readOnly
+        disabled
+      />
+
       <div className="clickables">{displayButtons}</div>
     </>
   );
