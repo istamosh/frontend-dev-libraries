@@ -91,7 +91,7 @@ const Engine = () => {
       case ".":
         // this section uses proper regex as the checker
         setInput((prevValue) =>
-          /([/+\-*])?(\d+)?\./.test(prevValue) ? prevValue : prevValue + "."
+          prevValue.includes(".") ? prevValue : prevValue + "."
         );
         break;
       case "=":
