@@ -97,30 +97,36 @@ const Engine = () => {
       case "+":
       case "/":
       case "*":
-        // console.log($("#display").val());
         setInput(assigned);
         setMemory((prev) =>
-          /[/*+-]$/.test(prev)
+          /[/*+]-$/.test(prev)
+            ? prev
+            : /[/*+-]$/.test(prev)
             ? prev.replace(/.$/, assigned)
             : prev + $("#display").val() + assigned
         );
         break;
       case "-":
-        setInput("-");
-        setMemory((prev) =>
-          /-$/.test(prev) ? prev.replace(/.$/, "-") : prev + "-"
-        );
+        // going to work this part
+        // setInput((prev) =>
+        //   /-$/.test(prev) ? prev : /-$/.test(memory) ? assigned : ""
+        // );
+        // setMemory((prev) =>
+        //   /-$/.test(prev) ? prev : $("#display").val() + "-"
+        // );
         break;
       case "=":
-        // this section will utilize memory variable for evaluation
-        setInput((prevValue) => evaluate(prevValue));
+        setInput((prevValue) => evaluate(memory + prevValue));
+        setMemory("");
         break;
       case "":
         break;
       default:
         // this section will handle other inputs like usual
         setInput((prevValue) =>
-          prevValue === "0" ? assigned : prevValue + assigned
+          prevValue === "0" || /[/*+]$/.test(prevValue)
+            ? assigned
+            : prevValue + assigned
         );
     }
   };
