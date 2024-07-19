@@ -94,6 +94,23 @@ const Engine = () => {
           prevValue.includes(".") ? prevValue : prevValue + "."
         );
         break;
+      case "+":
+      case "/":
+      case "*":
+        // console.log($("#display").val());
+        setInput(assigned);
+        setMemory((prev) =>
+          /[/*+-]$/.test(prev)
+            ? prev.replace(/.$/, assigned)
+            : prev + $("#display").val() + assigned
+        );
+        break;
+      case "-":
+        setInput("-");
+        setMemory((prev) =>
+          /-$/.test(prev) ? prev.replace(/.$/, "-") : prev + "-"
+        );
+        break;
       case "=":
         // this section will utilize memory variable for evaluation
         setInput((prevValue) => evaluate(prevValue));
