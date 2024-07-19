@@ -97,26 +97,31 @@ const Engine = () => {
       case "+":
       case "/":
       case "*":
-        setInput(assigned);
         setMemory((prev) =>
-          /[/*+]-$/.test(prev)
-            ? prev
-            : /[/*+-]$/.test(prev)
-            ? prev.replace(/.$/, assigned)
-            : prev + $("#display").val() + assigned
+          /\d/.test($("#display").val()) // check if input has a number
+            ? /^-\d/.test($("#display").val()) // check if input contains prepended minus
+              ? prev + `(${$("#display").val()})` + assigned
+              : prev + $("#display").val() + assigned
+            : prev.replace(/.$/, assigned)
         );
+        setInput("");
         break;
       case "-":
-        // going to work this part
-        // setInput((prev) =>
-        //   /-$/.test(prev) ? prev : /-$/.test(memory) ? assigned : ""
-        // );
-        // setMemory((prev) =>
-        //   /-$/.test(prev) ? prev : $("#display").val() + "-"
-        // );
+        // if memory already has minus
+        if (/-$/.test(memory)) {
+          setInput("-");
+        } else {
+          setMemory((prev) => prev + $("#display").val() + "-");
+          setInput("");
+        }
         break;
       case "=":
-        setInput((prevValue) => evaluate(memory + prevValue));
+        setInput((prevValue) =>
+          !/[-/+*]$/.test(memory) && $("#display").val().length === 0 // check if there is not any trailing operator, if it exist truncate it before eval
+            ? evaluate(memory + $("#display").val())
+            : evaluate(memory.replace(/.(-)?$/, "") + prevValue)
+        );
+        console.log(memory + $("#display").val());
         setMemory("");
         break;
       case "":
