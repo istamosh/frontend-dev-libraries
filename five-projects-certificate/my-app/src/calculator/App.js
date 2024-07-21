@@ -75,6 +75,19 @@ const Engine = () => {
     }
     return "";
   };
+  const handleEquation = (prevInput) => {
+    let calc;
+    if ($("#memory-display").val() && prevInput) {
+      calc = evaluate(memory + prevInput);
+      console.log(calc);
+    } else if (!prevInput) {
+      calc = evaluate(memory.replace(/.$/, ""));
+    } else {
+      calc = prevInput;
+    }
+    setMemory("");
+    return calc;
+  };
 
   const buttonPress = ({ key, target }) => {
     let input;
@@ -112,11 +125,11 @@ const Engine = () => {
       case "+":
       case "/":
       case "*":
+      case "-":
         setInput((prev) => handleOperator(prev, assigned));
         break;
-      case "-":
-        break;
       case "=":
+        setInput((prev) => handleEquation(prev));
         break;
       case "":
         break;
