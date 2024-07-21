@@ -61,6 +61,21 @@ const Engine = () => {
     }
   });
 
+  const handleBeginning = (prev, assigned) => {
+    if (prev === "0") {
+      return assigned;
+    }
+    return prev + assigned;
+  };
+  const handleOperator = (prevInput, operator) => {
+    if (prevInput) {
+      setMemory((prev) => prev + prevInput + operator);
+    } else {
+      setMemory((prev) => prev.replace(/.$/, operator));
+    }
+    return "";
+  };
+
   const buttonPress = ({ key, target }) => {
     let input;
     if (key) {
@@ -97,42 +112,17 @@ const Engine = () => {
       case "+":
       case "/":
       case "*":
-        setMemory((prev) =>
-          /\d/.test($("#display").val()) // check if input has a number
-            ? /^-\d/.test($("#display").val()) // check if input contains prepended minus
-              ? prev + `(${$("#display").val()})` + assigned
-              : prev + $("#display").val() + assigned
-            : prev.replace(/.$/, assigned)
-        );
-        setInput("");
+        setInput((prev) => handleOperator(prev, assigned));
         break;
       case "-":
-        // if memory already has minus
-        if (/-$/.test(memory)) {
-          setInput("-");
-        } else {
-          setMemory((prev) => prev + $("#display").val() + "-");
-          setInput("");
-        }
         break;
       case "=":
-        setInput((prevValue) =>
-          !/[-/+*]$/.test(memory) && $("#display").val().length === 0 // check if there is not any trailing operator, if it exist truncate it before eval
-            ? evaluate(memory + $("#display").val())
-            : evaluate(memory.replace(/.(-)?$/, "") + prevValue)
-        );
-        console.log(memory + $("#display").val());
-        setMemory("");
         break;
       case "":
         break;
       default:
-        // this section will handle other inputs like usual
-        setInput((prevValue) =>
-          prevValue === "0" || /[/*+]$/.test(prevValue)
-            ? assigned
-            : prevValue + assigned
-        );
+        setInput((prev) => handleBeginning(prev, assigned));
+        break;
     }
   };
 
