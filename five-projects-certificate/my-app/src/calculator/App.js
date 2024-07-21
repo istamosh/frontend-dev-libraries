@@ -5,19 +5,18 @@ import { evaluate } from "mathjs";
 const buttons = [
   { id: "clear", key: "c", label: "C" },
   { id: "divide", key: "/", label: "÷" },
+  { id: "multiply", key: "*", label: "×" },
   { id: "seven", key: "7", label: "7" },
   { id: "eight", key: "8", label: "8" },
   { id: "nine", key: "9", label: "9" },
-  { id: "multiply", key: "*", label: "×" },
+  { id: "subtract", key: "-", label: "-" },
   { id: "four", key: "4", label: "4" },
   { id: "five", key: "5", label: "5" },
   { id: "six", key: "6", label: "6" },
-  { id: "subtract", key: "-", label: "-" },
+  { id: "add", key: "+", label: "+" },
   { id: "one", key: "1", label: "1" },
   { id: "two", key: "2", label: "2" },
   { id: "three", key: "3", label: "3" },
-  { id: "add", key: "+", label: "+" },
-  { id: "negate", key: "n", label: "+/-" },
   { id: "zero", key: "0", label: "0" },
   { id: "decimal", key: ".", label: "." },
   { id: "equals", key: "=", label: "=" },
@@ -45,8 +44,21 @@ const Engine = () => {
           })
           .addClass("text-center gap-1");
         $(".clickables")
-          .children("div[id]")
-          .addClass("btn btn-dark bg-gradient btn-like-div");
+          .children()
+          .addClass(
+            "btn btn-dark bg-gradient btn-like-div d-flex align-items-center justify-content-center"
+          );
+        $("#clear").css({
+          "grid-column": "1/3",
+          "grid-row": "1/2",
+        });
+        $("#zero").css({
+          "grid-column": "1/3",
+        });
+        $("#equals").css({
+          "grid-column": "4/5",
+          "grid-row": "4/6",
+        });
       });
       document.addEventListener("keydown", buttonPress);
       mounted.current = true;
@@ -61,30 +73,29 @@ const Engine = () => {
     }
   });
 
-  const handleBeginning = (prev, assigned) => {
-    if (prev === "0") {
-      return assigned;
-    }
-    return prev + assigned;
-  };
   const handleOperator = (prevInput, operator) => {
     if (prevInput) {
       setMemory((prev) => prev + prevInput + operator);
     } else {
-      setMemory((prev) => prev.replace(/.$/, operator));
+      if (operator === "-") {
+        setMemory((prev) => (/-$/.test(prev) ? prev : prev + operator));
+      } else {
+        setMemory((prev) =>
+          /[*/+]-$/.test(prev)
+            ? prev.replace(/.{2}$/, operator)
+            : prev.replace(/.$/, operator)
+        );
+      }
     }
     return "";
   };
   const handleEquation = (prevInput) => {
-    let calc;
-    if ($("#memory-display").val() && prevInput) {
-      calc = evaluate(memory + prevInput);
-      console.log(calc);
-    } else if (!prevInput) {
-      calc = evaluate(memory.replace(/.$/, ""));
-    } else {
-      calc = prevInput;
-    }
+    let calc =
+      /[/*+-]$/.test($("#memory-display").val()) && prevInput
+        ? evaluate(memory + prevInput)
+        : !prevInput
+        ? evaluate(memory.replace(/.$/, ""))
+        : prevInput;
     setMemory("");
     return calc;
   };
@@ -107,17 +118,7 @@ const Engine = () => {
         setMemory("");
         setInput("0");
         break;
-      case "n":
-        setInput((prevValue) =>
-          memory === ""
-            ? Array.from(prevValue)[0] === "-"
-              ? prevValue.slice(1)
-              : "-" + prevValue
-            : prevValue
-        );
-        break;
       case ".":
-        // this section uses proper regex as the checker
         setInput((prevValue) =>
           prevValue.includes(".") ? prevValue : prevValue + "."
         );
@@ -134,12 +135,12 @@ const Engine = () => {
       case "":
         break;
       default:
-        setInput((prev) => handleBeginning(prev, assigned));
+        setInput((prev) => (prev === "0" ? assigned : prev + assigned));
         break;
     }
   };
 
-  let displayButtons = [<div key="empty1"></div>, <div key="empty2"></div>];
+  let displayButtons = [];
   buttons.forEach((el) => {
     displayButtons.push(
       <div id={el.id} key={el.id} onClick={buttonPress}>
