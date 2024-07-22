@@ -55,6 +55,9 @@ const Engine = () => {
           .addClass(
             "btn btn-dark bg-gradient btn-like-div d-flex align-items-center justify-content-center"
           );
+        $("#clear").removeClass("btn-dark").addClass("btn-danger");
+        $("#equals").removeClass("btn-dark").addClass("btn-primary");
+        $("#zero").removeClass("btn-dark").addClass("btn-success");
         $("#add").css({
           "grid-column": "4",
           "grid-row": "2/4",
