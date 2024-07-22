@@ -1,15 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import $ from "jquery";
 import { evaluate } from "mathjs";
+import "./styles/style.css";
 
 const buttons = [
   { id: "clear", key: "c", label: "C" },
   { id: "divide", key: "/", label: "÷" },
   { id: "multiply", key: "*", label: "×" },
-  { id: "seven", key: "7", label: "7" },
+  { id: "subtract", key: "-", label: "-" },
   { id: "eight", key: "8", label: "8" },
   { id: "nine", key: "9", label: "9" },
-  { id: "subtract", key: "-", label: "-" },
+  { id: "seven", key: "7", label: "7" },
   { id: "four", key: "4", label: "4" },
   { id: "five", key: "5", label: "5" },
   { id: "six", key: "6", label: "6" },
@@ -33,14 +34,20 @@ const Engine = () => {
         $("body").addClass(
           "d-flex justify-content-center align-items-center vh-100"
         );
-        $("#app").addClass("d-flex flex-column");
-        $("#memory-display").addClass("form-text text-end");
-        $("#display").addClass("form-text text-end").css({ color: "blue" });
+        $("#app").addClass(
+          "d-flex flex-column align-items-center bg-light border"
+        );
+        $("h1").addClass("text-center text-wrap m-2");
+        $("#memory-display").addClass("form-text text-end form-control");
+        $("#display")
+          .addClass("form-text text-end form-control mb-2")
+          .css({ color: "blue" });
         $(".clickables")
           .css({
             display: "grid",
             "grid-template-columns": "repeat(4, 1fr)",
             "grid-template-rows": "repeat(3, 1fr)",
+            "max-width": "160px",
           })
           .addClass("text-center gap-1");
         $(".clickables")
@@ -48,17 +55,18 @@ const Engine = () => {
           .addClass(
             "btn btn-dark bg-gradient btn-like-div d-flex align-items-center justify-content-center"
           );
-        $("#clear").css({
-          "grid-column": "1/3",
-          "grid-row": "1/2",
+        $("#add").css({
+          "grid-column": "4",
+          "grid-row": "2/4",
         });
         $("#zero").css({
           "grid-column": "1/3",
         });
         $("#equals").css({
-          "grid-column": "4/5",
+          "grid-column": "4",
           "grid-row": "4/6",
         });
+        $("span").addClass("text-center text-secondary text-wrap mt-2");
       });
       document.addEventListener("keydown", buttonPress);
       mounted.current = true;
@@ -112,8 +120,14 @@ const Engine = () => {
     }
 
     const assigned =
-      input !== undefined ? buttons.find((el) => el.id === input).key : "";
-    switch (assigned) {
+      input !== undefined ? buttons.find((el) => el.id === input) : "";
+
+    $(`#${assigned.id}`).addClass("button-animation");
+    setTimeout(() => {
+      $(`#${assigned.id}`).removeClass("button-animation");
+    }, 100);
+
+    switch (assigned.key) {
       case "c":
         setMemory("");
         setInput("0");
@@ -127,15 +141,24 @@ const Engine = () => {
       case "/":
       case "*":
       case "-":
-        setInput((prev) => handleOperator(prev, assigned));
+        setInput((prev) => handleOperator(prev, assigned.key));
         break;
       case "=":
         setInput((prev) => handleEquation(prev));
         break;
-      case "":
+      case "0":
+      case "1":
+      case "2":
+      case "3":
+      case "4":
+      case "5":
+      case "6":
+      case "7":
+      case "8":
+      case "9":
+        setInput((prev) => (prev === "0" ? assigned.key : prev + assigned.key));
         break;
       default:
-        setInput((prev) => (prev === "0" ? assigned : prev + assigned));
         break;
     }
   };
@@ -150,6 +173,7 @@ const Engine = () => {
   });
   return (
     <>
+      <h1>Calculator</h1>
       <input
         type="text"
         name="memory"
@@ -166,8 +190,8 @@ const Engine = () => {
         readOnly
         disabled
       />
-
       <div className="clickables">{displayButtons}</div>
+      <span>made with ❤️ by Istamosh.</span>
     </>
   );
 };

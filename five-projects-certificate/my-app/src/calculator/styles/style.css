@@ -1,5 +1,5 @@
 .button-animation {
-  animation: button-press 0.2s ease;
+  animation: button-press 0.1s ease;
 }
 
 @keyframes button-press {
