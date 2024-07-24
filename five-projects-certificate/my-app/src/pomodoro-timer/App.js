@@ -2,11 +2,27 @@ import React, { useState, useRef, useEffect } from "react";
 import $ from "jquery";
 import "./styles/style.css";
 
-const Pomodoro = () => {
-  const [timer, setTimer] = useState("0");
-  const [breakTime, setBreakTime] = useState("5");
-  const [session, setSession] = useState("25");
+const displayTime = (time) => {
+  // let hours = Math.floor((time / 60 / 60) % 24);
+  let minutes = Math.floor((time / 60) % 60);
+  let seconds = Math.floor(time % 60);
 
+  // hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  seconds = seconds < 10 ? "0" + seconds : seconds;
+
+  return minutes + ":" + seconds;
+};
+
+const minuteToSecond = (minute) => minute * 60;
+
+const Pomodoro = () => {
+  const [time, setTime] = useState(minuteToSecond(25));
+  const [breakTime, setBreakTime] = useState(5);
+  const [session, setSession] = useState(25);
+  const [playing, setPlaying] = useState(false);
+
+  // component lifecycle
   const mounted = useRef();
   useEffect(() => {
     if (!mounted.current) {
@@ -22,6 +38,18 @@ const Pomodoro = () => {
       return () => {};
     }
   });
+
+  const timer = useRef();
+
+  useEffect(() => {
+    if (playing) {
+      timer.current = setInterval(() => {
+        setTime((pre) => pre - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(timer.current);
+  }, [playing]);
 
   return (
     <>
@@ -55,9 +83,21 @@ const Pomodoro = () => {
       <span for="" id="timer-label">
         Session
       </span>
-      <p id="time-left">mm:ss</p>
-      <button id="start_stop">Start / Stop</button>
-      <button id="reset">Reset</button>
+      <p id="time-left">{displayTime(time)}</p>
+      <button
+        id="start_stop"
+        onClick={() => {
+          if (playing) {
+            clearInterval(timer.current);
+          }
+          setPlaying(!playing);
+        }}
+      >
+        {playing ? "Stop" : "Start"}
+      </button>
+      <button id="reset" onClick={() => setTime(0)}>
+        Reset
+      </button>
     </>
   );
 };
