@@ -21,7 +21,7 @@ const Pomodoro = () => {
   const [session, setSession] = useState(25);
   const [time, setTime] = useState(minuteToSecond(25));
   const [playing, setPlaying] = useState(false);
-
+  const [volume, setVolume] = useState(0.5);
   // component lifecycle
   const mounted = useRef();
   useEffect(() => {
@@ -58,13 +58,17 @@ const Pomodoro = () => {
     if (time === 0) {
       clearInterval(timer.current);
       setPlaying(false);
-      let sound = new Audio(
+      const sound = new Audio(
         "https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
       );
+      sound.volume = volume;
+
+      sound.currentTime = 0;
       sound.play();
+
       setTimeout(() => {
         sound.pause();
-        sound = null;
+        sound.src = null;
       }, 3000);
     }
   }, [time]);
@@ -165,6 +169,19 @@ const Pomodoro = () => {
       >
         Reset
       </button>
+
+      <span id="volume-label">Notification Volume</span>
+      <input
+        type="range"
+        min="0.01"
+        max="1"
+        name="volume"
+        id="volume-control"
+        value={volume}
+        onChange={({ target }) => {
+          setVolume(target.value);
+        }}
+      />
     </>
   );
 };
