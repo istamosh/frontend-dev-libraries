@@ -7,21 +7,23 @@ const displayTime = (time) => {
   let minutes = Math.floor((time / 60) % 60);
   let seconds = Math.floor(time % 60);
 
-  hours = hours < 10 ? "" + hours : hours;
+  hours = hours < 1 ? "" : hours + ":";
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
 
-  return hours + ":" + minutes + ":" + seconds;
+  return hours + minutes + ":" + seconds;
 };
 
 const minuteToSecond = (minute) => minute * 60;
 
 const Pomodoro = () => {
-  const [breakTime, setBreakTime] = useState(5);
+  const [breakSession, setBreakSession] = useState(5);
   const [session, setSession] = useState(25);
-  const [time, setTime] = useState(minuteToSecond(25));
+  const [time, setTime] = useState();
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [shift, setShift] = useState(false);
+
   // component lifecycle
   const mounted = useRef();
   useEffect(() => {
@@ -39,12 +41,29 @@ const Pomodoro = () => {
     }
   });
 
-  const timer = useRef();
+  const timer = useRef(null);
+  const startTimer = () => {
+    timer.current = setInterval(() => {
+      setTime((prev) => prev - 1);
+    }, 1000);
+  };
+
+  const triggerAlarm = () => {
+    const alarmSound = new Audio(
+      "https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
+    );
+    alarmSound.volume = volume;
+    alarmSound.currentTime = 0;
+    alarmSound.play();
+    setTimeout(() => {
+      alarmSound.pause();
+      alarmSound.src = null;
+    }, 5000);
+  };
+
   useEffect(() => {
     if (playing) {
-      timer.current = setInterval(() => {
-        setTime((prev) => prev - 1);
-      }, 1000);
+      startTimer();
     }
 
     $("button, input")
@@ -56,20 +75,15 @@ const Pomodoro = () => {
 
   useEffect(() => {
     if (time === 0) {
+      $("#timer-label").text("Alarm!");
+      // $("button, input").not("#start_stop, #reset").prop("disabled", true);
       clearInterval(timer.current);
-      setPlaying(false);
-      const sound = new Audio(
-        "https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
-      );
-      sound.volume = volume;
-
-      sound.currentTime = 0;
-      sound.play();
+      triggerAlarm();
 
       setTimeout(() => {
-        sound.pause();
-        sound.src = null;
-      }, 3000);
+        setShift((prev) => !prev);
+        startTimer();
+      }, 5000);
     }
   }, [time]);
 
@@ -77,15 +91,20 @@ const Pomodoro = () => {
     setTime(minuteToSecond(session));
   }, [session]);
 
+  useEffect(() => {
+    setTime(minuteToSecond(shift ? breakSession : session));
+    $("#timer-label").text(shift ? "Break" : "Session");
+  }, [shift, breakSession, session]);
+
   return (
     <>
       <h1>Pomodoro Timer</h1>
       <span id="break-label">Break Length</span>
-      <span id="break-time">{breakTime}:00</span>
+      <span id="break-time">{breakSession}:00</span>
       <button
         id="break-decrement"
         onClick={() => {
-          setBreakTime((prev) =>
+          setBreakSession((prev) =>
             prev > $("#break-length").attr("min") ? prev - 1 : prev
           );
         }}
@@ -96,17 +115,18 @@ const Pomodoro = () => {
         type="range"
         min="1"
         max="60"
+        step="1"
         name="break"
         id="break-length"
-        value={breakTime}
+        value={breakSession}
         onChange={({ target }) => {
-          setBreakTime(target.value);
+          setBreakSession(target.value);
         }}
       />
       <button
         id="break-increment"
         onClick={() => {
-          setBreakTime((prev) =>
+          setBreakSession((prev) =>
             prev < $("#break-length").attr("max") ? prev + 1 : prev
           );
         }}
@@ -130,6 +150,7 @@ const Pomodoro = () => {
         type="range"
         min="1"
         max="60"
+        step="1"
         name="session"
         id="session-length"
         value={session}
@@ -164,7 +185,8 @@ const Pomodoro = () => {
       <button
         id="reset"
         onClick={() => {
-          setTime(minuteToSecond(session));
+          setBreakSession(5);
+          setSession(25);
         }}
       >
         Reset
@@ -175,6 +197,7 @@ const Pomodoro = () => {
         type="range"
         min="0.01"
         max="1"
+        step="0.01"
         name="volume"
         id="volume-control"
         value={volume}
@@ -182,6 +205,10 @@ const Pomodoro = () => {
           setVolume(target.value);
         }}
       />
+      <audio
+        src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
+        id="beep"
+      ></audio>
     </>
   );
 };
