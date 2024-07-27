@@ -16,6 +16,18 @@ const displayTime = (time) => {
 
 const minuteToSecond = (minute) => minute * 60;
 
+// custom debounce function
+const debounce = (func, wait = 0) => {
+  let timeoutID = null;
+
+  return (...args) => {
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
+};
+
 const Pomodoro = () => {
   const [breakSession, setBreakSession] = useState(5);
   const [session, setSession] = useState(25);
@@ -23,6 +35,7 @@ const Pomodoro = () => {
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [shift, setShift] = useState(false);
+  const [music, setMusic] = useState(false);
 
   // component lifecycle
   const mounted = useRef();
@@ -48,19 +61,6 @@ const Pomodoro = () => {
     }, 1000);
   };
 
-  const triggerAlarm = () => {
-    const alarmSound = new Audio(
-      "https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
-    );
-    alarmSound.volume = volume;
-    alarmSound.currentTime = 0;
-    alarmSound.play();
-    setTimeout(() => {
-      alarmSound.pause();
-      alarmSound.src = null;
-    }, 5000);
-  };
-
   useEffect(() => {
     if (playing) {
       startTimer();
@@ -78,14 +78,26 @@ const Pomodoro = () => {
       $("#timer-label").text("Alarm!");
       // $("button, input").not("#start_stop, #reset").prop("disabled", true);
       clearInterval(timer.current);
-      triggerAlarm();
+
+      // debounce(() => {
+
+      // }, 300);
+
+      const audioElement = $("#beep")[0];
+      audioElement.volume = volume;
+      if (audioElement.paused) {
+        audioElement.currentTime = 0;
+        audioElement.play().catch((e) => {
+          console.error("Error playing audio:", e);
+        });
+      }
 
       setTimeout(() => {
         setShift((prev) => !prev);
         startTimer();
       }, 5000);
     }
-  }, [time]);
+  }, [time, volume]);
 
   useEffect(() => {
     setTime(minuteToSecond(session));
@@ -187,6 +199,7 @@ const Pomodoro = () => {
         onClick={() => {
           setBreakSession(5);
           setSession(25);
+          setMusic(false);
         }}
       >
         Reset
