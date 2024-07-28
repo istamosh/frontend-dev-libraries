@@ -3,30 +3,18 @@ import $ from "jquery";
 import "./styles/style.css";
 
 const displayTime = (time) => {
-  let hours = Math.floor((time / 60 / 60) % 24);
-  let minutes = Math.floor((time / 60) % 60);
+  // let hours = Math.floor((time / 60 / 60) % 24);
+  let minutes = Math.floor(time / 60);
   let seconds = Math.floor(time % 60);
 
-  hours = hours < 1 ? "" : hours + ":";
+  // hours = hours < 1 ? "" : hours + ":";
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
 
-  return hours + minutes + ":" + seconds;
+  return minutes + ":" + seconds;
 };
 
 const minuteToSecond = (minute) => minute * 60;
-
-// custom debounce function
-const debounce = (func, wait = 0) => {
-  let timeoutID = null;
-
-  return (...args) => {
-    clearTimeout(timeoutID);
-    timeoutID = setTimeout(() => {
-      func(...args);
-    }, wait);
-  };
-};
 
 const Pomodoro = () => {
   const [breakSession, setBreakSession] = useState(5);
@@ -35,7 +23,7 @@ const Pomodoro = () => {
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [shift, setShift] = useState(false);
-  const [music, setMusic] = useState(false);
+  const [notification, setNotification] = useState(false);
 
   // component lifecycle
   const mounted = useRef();
@@ -62,6 +50,22 @@ const Pomodoro = () => {
   };
 
   useEffect(() => {
+    if (notification) {
+      const audioElement = $("#beep")[0];
+      audioElement.volume = volume;
+      audioElement.currentTime = 0;
+      audioElement.play().catch((e) => {
+        console.error("Error playing audio:", e);
+      });
+
+      setTimeout(() => {
+        audioElement.pause();
+        setNotification(false);
+      }, 5000);
+    }
+  }, [notification, volume]);
+
+  useEffect(() => {
     if (playing) {
       startTimer();
     }
@@ -78,19 +82,7 @@ const Pomodoro = () => {
       $("#timer-label").text("Alarm!");
       // $("button, input").not("#start_stop, #reset").prop("disabled", true);
       clearInterval(timer.current);
-
-      // debounce(() => {
-
-      // }, 300);
-
-      const audioElement = $("#beep")[0];
-      audioElement.volume = volume;
-      if (audioElement.paused) {
-        audioElement.currentTime = 0;
-        audioElement.play().catch((e) => {
-          console.error("Error playing audio:", e);
-        });
-      }
+      setNotification(true);
 
       setTimeout(() => {
         setShift((prev) => !prev);
@@ -108,22 +100,32 @@ const Pomodoro = () => {
     $("#timer-label").text(shift ? "Break" : "Session");
   }, [shift, breakSession, session]);
 
+  const handleButton = ({ target }) => {
+    // console.log(target.id);
+    if (target.id.includes("break")) {
+      setBreakSession((prev) =>
+        target.id.includes("decrement")
+          ? Math.max(1, prev - 1)
+          : Math.min(60, prev + 1)
+      );
+    } else {
+      setSession((prev) =>
+        target.id.includes("decrement")
+          ? Math.max(1, prev - 1)
+          : Math.min(60, prev + 1)
+      );
+    }
+  };
+
   return (
     <>
       <h1>Pomodoro Timer</h1>
       <span id="break-label">Break Length</span>
       <span id="break-time">{breakSession}:00</span>
-      <button
-        id="break-decrement"
-        onClick={() => {
-          setBreakSession((prev) =>
-            prev > $("#break-length").attr("min") ? prev - 1 : prev
-          );
-        }}
-      >
+      <button id="break-decrement" onClick={handleButton}>
         {"<"}
       </button>
-      <input
+      {/* <input
         type="range"
         min="1"
         max="60"
@@ -134,31 +136,18 @@ const Pomodoro = () => {
         onChange={({ target }) => {
           setBreakSession(target.value);
         }}
-      />
-      <button
-        id="break-increment"
-        onClick={() => {
-          setBreakSession((prev) =>
-            prev < $("#break-length").attr("max") ? prev + 1 : prev
-          );
-        }}
-      >
+      /> */}
+      <span id="break-length">{breakSession}</span>
+      <button id="break-increment" onClick={handleButton}>
         {">"}
       </button>
 
       <span id="session-label">Session Length</span>
       <span id="session-time">{session}:00</span>
-      <button
-        id="session-decrement"
-        onClick={() => {
-          setSession((prev) =>
-            prev > $("#session-length").attr("min") ? prev - 1 : prev
-          );
-        }}
-      >
+      <button id="session-decrement" onClick={handleButton}>
         {"<"}
       </button>
-      <input
+      {/* <input
         type="range"
         min="1"
         max="60"
@@ -169,15 +158,9 @@ const Pomodoro = () => {
         onChange={({ target }) => {
           setSession(target.value);
         }}
-      />
-      <button
-        id="session-increment"
-        onClick={() => {
-          setSession((prev) =>
-            prev < $("#session-length").attr("max") ? prev + 1 : prev
-          );
-        }}
-      >
+      /> */}
+      <span id="session-length">{session}</span>
+      <button id="session-increment" onClick={handleButton}>
         {">"}
       </button>
 
@@ -199,7 +182,8 @@ const Pomodoro = () => {
         onClick={() => {
           setBreakSession(5);
           setSession(25);
-          setMusic(false);
+          setTime(minuteToSecond(25));
+          setNotification(false);
         }}
       >
         Reset
