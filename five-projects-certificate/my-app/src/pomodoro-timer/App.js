@@ -117,12 +117,24 @@ const Pomodoro = () => {
     }
   };
 
+  const handleReset = () => {
+    setBreakSession(5);
+    setSession(25);
+    setTime(minuteToSecond(25));
+
+    $("#beep")[0].currentTime = 0;
+  };
+
   return (
     <>
       <h1>Pomodoro Timer</h1>
       <span id="break-label">Break Length</span>
       <span id="break-time">{breakSession}:00</span>
-      <button id="break-decrement" onClick={handleButton}>
+      <button
+        id="break-decrement"
+        data-testid="break-decrement"
+        onClick={handleButton}
+      >
         {"<"}
       </button>
       {/* <input
@@ -177,15 +189,7 @@ const Pomodoro = () => {
       >
         {playing ? "Pause" : "Start"}
       </button>
-      <button
-        id="reset"
-        onClick={() => {
-          setBreakSession(5);
-          setSession(25);
-          setTime(minuteToSecond(25));
-          setNotification(false);
-        }}
-      >
+      <button id="reset" onClick={handleReset}>
         Reset
       </button>
 
