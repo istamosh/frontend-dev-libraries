@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import $ from "jquery";
 import "./styles/style.css";
 
@@ -23,7 +23,6 @@ const Pomodoro = () => {
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [shift, setShift] = useState(false);
-  const [notification, setNotification] = useState(false);
 
   // component lifecycle
   const mounted = useRef();
@@ -45,51 +44,36 @@ const Pomodoro = () => {
   const timer = useRef(null);
   const startTimer = () => {
     timer.current = setInterval(() => {
-      setTime((prev) => prev - 1);
+      setTime((prev) => Math.max(prev - 1, 0));
     }, 1000);
+  };
+  const stopTimer = () => {
+    clearInterval(timer.current);
+    timer.current = null;
   };
 
   useEffect(() => {
-    if (notification) {
-      const audioElement = $("#beep")[0];
-      audioElement.volume = volume;
-      audioElement.currentTime = 0;
-      audioElement.play().catch((e) => {
-        console.error("Error playing audio:", e);
-      });
-
-      setTimeout(() => {
-        audioElement.pause();
-        setNotification(false);
-      }, 5000);
-    }
-  }, [notification, volume]);
-
-  useEffect(() => {
-    if (playing) {
-      startTimer();
-    }
-
-    $("button, input")
-      .not("#start_stop, #reset")
-      .prop("disabled", playing ? true : false);
-
-    return () => clearInterval(timer.current);
+    playing ? startTimer() : stopTimer();
+    $("#volume-control").prop("disabled", playing ? true : false);
   }, [playing]);
+
+  const playAlarm = useCallback(() => {
+    const audioElement = $("#beep")[0];
+    audioElement.volume = volume;
+    audioElement.play().catch((e) => {
+      console.error("Error playing audio:", e);
+    });
+  }, [volume]);
 
   useEffect(() => {
     if (time === 0) {
       $("#timer-label").text("Alarm!");
-      // $("button, input").not("#start_stop, #reset").prop("disabled", true);
-      clearInterval(timer.current);
-      setNotification(true);
 
-      setTimeout(() => {
-        setShift((prev) => !prev);
-        startTimer();
-      }, 5000);
+      playAlarm();
+
+      setShift((prev) => !prev);
     }
-  }, [time, volume]);
+  }, [time, playAlarm]);
 
   useEffect(() => {
     setTime(minuteToSecond(session));
@@ -101,19 +85,21 @@ const Pomodoro = () => {
   }, [shift, breakSession, session]);
 
   const handleButton = ({ target }) => {
-    // console.log(target.id);
-    if (target.id.includes("break")) {
-      setBreakSession((prev) =>
-        target.id.includes("decrement")
-          ? Math.max(1, prev - 1)
-          : Math.min(60, prev + 1)
-      );
-    } else {
-      setSession((prev) =>
-        target.id.includes("decrement")
-          ? Math.max(1, prev - 1)
-          : Math.min(60, prev + 1)
-      );
+    if (!playing) {
+      if (target.id.includes("break")) {
+        setBreakSession((prev) =>
+          target.id.includes("decrement")
+            ? Math.max(1, prev - 1)
+            : Math.min(60, prev + 1)
+        );
+      }
+      if (target.id.includes("session")) {
+        setSession((prev) =>
+          target.id.includes("decrement")
+            ? Math.max(1, prev - 1)
+            : Math.min(60, prev + 1)
+        );
+      }
     }
   };
 
@@ -180,10 +166,10 @@ const Pomodoro = () => {
       <button
         id="reset"
         onClick={() => {
+          setPlaying(false);
           setBreakSession(5);
           setSession(25);
           setTime(minuteToSecond(25));
-          setNotification(false);
         }}
       >
         Reset
