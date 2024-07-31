@@ -3,11 +3,9 @@ import $ from "jquery";
 import "./styles/style.css";
 
 const displayTime = (time) => {
-  // let hours = Math.floor((time / 60 / 60) % 24);
   let minutes = Math.floor(time / 60);
   let seconds = Math.floor(time % 60);
 
-  // hours = hours < 1 ? "" : hours + ":";
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
 
@@ -21,8 +19,8 @@ const Pomodoro = () => {
   const [session, setSession] = useState(25);
   const [time, setTime] = useState();
   const [playing, setPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.5);
   const [shift, setShift] = useState(false);
+  const [volume, setVolume] = useState(0.5);
 
   // component lifecycle
   const mounted = useRef();
@@ -33,7 +31,6 @@ const Pomodoro = () => {
           "d-flex justify-content-center flex-column align-items-center vh-100"
         );
       });
-
       mounted.current = true;
       return () => {};
     } else {
@@ -54,7 +51,6 @@ const Pomodoro = () => {
 
   useEffect(() => {
     playing ? startTimer() : stopTimer();
-    $("#volume-control").prop("disabled", playing ? true : false);
   }, [playing]);
 
   const playAlarm = useCallback(() => {
@@ -67,10 +63,7 @@ const Pomodoro = () => {
 
   useEffect(() => {
     if (time === 0) {
-      $("#timer-label").text("Alarm!");
-
       playAlarm();
-
       setShift((prev) => !prev);
     }
   }, [time, playAlarm]);
@@ -103,6 +96,16 @@ const Pomodoro = () => {
     }
   };
 
+  const handleReset = () => {
+    setPlaying(false);
+    setShift(false);
+    setBreakSession(5);
+    setSession(25);
+
+    $("#beep")[0].pause();
+    $("#beep")[0].currentTime = 0;
+  };
+
   return (
     <>
       <h1>Pomodoro Timer</h1>
@@ -111,7 +114,7 @@ const Pomodoro = () => {
       <button id="break-decrement" onClick={handleButton}>
         {"<"}
       </button>
-      {/* <input
+      <input
         type="range"
         min="1"
         max="60"
@@ -122,8 +125,7 @@ const Pomodoro = () => {
         onChange={({ target }) => {
           setBreakSession(target.value);
         }}
-      /> */}
-      <span id="break-length">{breakSession}</span>
+      />
       <button id="break-increment" onClick={handleButton}>
         {">"}
       </button>
@@ -133,7 +135,7 @@ const Pomodoro = () => {
       <button id="session-decrement" onClick={handleButton}>
         {"<"}
       </button>
-      {/* <input
+      <input
         type="range"
         min="1"
         max="60"
@@ -144,8 +146,7 @@ const Pomodoro = () => {
         onChange={({ target }) => {
           setSession(target.value);
         }}
-      /> */}
-      <span id="session-length">{session}</span>
+      />
       <button id="session-increment" onClick={handleButton}>
         {">"}
       </button>
@@ -155,23 +156,12 @@ const Pomodoro = () => {
       <button
         id="start_stop"
         onClick={() => {
-          if (playing) {
-            clearInterval(timer.current);
-          }
           setPlaying(!playing);
         }}
       >
         {playing ? "Pause" : "Start"}
       </button>
-      <button
-        id="reset"
-        onClick={() => {
-          setPlaying(false);
-          setBreakSession(5);
-          setSession(25);
-          setTime(minuteToSecond(25));
-        }}
-      >
+      <button id="reset" onClick={handleReset}>
         Reset
       </button>
 
