@@ -5,3 +5,20 @@
 #time-left {
   font-family: "Martian Mono", monospace;
 }
+
+.custom-range {
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #0dcaf0;
+  }
+
+  &::-moz-range-thumb {
+    appearance: none;
+    background: #0dcaf0;
+  }
+
+  &::-ms-thumb {
+    appearance: none;
+    background: #0dcaf0;
+  }
+}

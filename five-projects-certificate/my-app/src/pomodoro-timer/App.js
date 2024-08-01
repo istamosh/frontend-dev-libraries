@@ -36,8 +36,9 @@ const Pomodoro = () => {
         $("[id*='-decrement'], [id*='-increment']").addClass(
           "btn btn-outline-light btn-sm ms-1 me-1"
         );
-        $("#start_stop, #reset").addClass("btn btn-primary ms-1 me-1 mb-2");
-        $("input").addClass("form-range");
+        $("#start_stop, #reset").addClass("btn ms-1 me-1 mb-2");
+        $("#reset").addClass("btn-primary");
+        $("input").addClass("form-range custom-range");
         $("#break-time, #session-time").addClass("fs-5");
         $("#timer-label").addClass("fs-2");
         $("#time-left").addClass("fs-1");
@@ -65,6 +66,9 @@ const Pomodoro = () => {
 
   useEffect(() => {
     playing ? startTimer() : stopTimer();
+    $("#start_stop")
+      .addClass(playing ? "btn-secondary" : "btn-primary")
+      .removeClass(playing ? "btn-primary" : "btn-secondary");
   }, [playing]);
 
   const playAlarm = useCallback(() => {

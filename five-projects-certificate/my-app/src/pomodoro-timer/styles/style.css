@@ -3,4 +3,18 @@
 #session-time,
 #time-left {
   font-family: "Martian Mono", monospace;
+}
+
+.custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: #0dcaf0;
+}
+.custom-range::-moz-range-thumb {
+  -moz-appearance: none;
+       appearance: none;
+  background: #0dcaf0;
+}
+.custom-range::-ms-thumb {
+  appearance: none;
+  background: #0dcaf0;
 }/*# sourceMappingURL=style.css.map */
