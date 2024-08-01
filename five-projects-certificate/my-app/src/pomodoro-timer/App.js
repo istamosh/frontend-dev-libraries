@@ -28,8 +28,21 @@ const Pomodoro = () => {
     if (!mounted.current) {
       $(function () {
         $("#app").addClass(
-          "d-flex justify-content-center flex-column align-items-center vh-100"
+          "d-flex justify-content-center flex-column align-items-center vh-100 bg-dark"
         );
+        $("h1").addClass("text-center text-white");
+        $("span:not(#timer-label)").addClass("text-white");
+        $("#session-label").addClass("mt-3");
+        $("[id*='-decrement'], [id*='-increment']").addClass(
+          "btn btn-primary btn-sm ms-1 me-1"
+        );
+        $("#start_stop, #reset").addClass("btn btn-primary ms-1 me-1");
+        $("input").addClass("form-range");
+        $("#break-time, #session-time").addClass("fs-5");
+        $("#timer-label").addClass("fs-2");
+        $("#time-left").addClass("fs-1");
+        $('[id*="controlpanel"]').addClass("d-flex align-items-center");
+        $("#notification-area").addClass("d-flex flex-column");
       });
       mounted.current = true;
       return () => {};
@@ -74,7 +87,10 @@ const Pomodoro = () => {
 
   useEffect(() => {
     setTime(minuteToSecond(shift ? breakSession : session));
-    $("#timer-label").text(shift ? "Break" : "Session");
+    $("#timer-label")
+      .text(shift ? "Break" : "Session")
+      .addClass(shift ? "text-info" : "text-warning")
+      .removeClass(shift ? "text-warning" : "text-info");
   }, [shift, breakSession, session]);
 
   const handleButton = ({ target }) => {
@@ -101,6 +117,7 @@ const Pomodoro = () => {
     setShift(false);
     setBreakSession(5);
     setSession(25);
+    setTime(minuteToSecond(25));
 
     $("#beep")[0].pause();
     $("#beep")[0].currentTime = 0;
@@ -111,77 +128,85 @@ const Pomodoro = () => {
       <h1>Pomodoro Timer</h1>
       <span id="break-label">Break Length</span>
       <span id="break-time">{breakSession}:00</span>
-      <button id="break-decrement" onClick={handleButton}>
-        {"<"}
-      </button>
-      <input
-        type="range"
-        min="1"
-        max="60"
-        step="1"
-        name="break"
-        id="break-length"
-        value={breakSession}
-        onChange={({ target }) => {
-          setBreakSession(target.value);
-        }}
-      />
-      <button id="break-increment" onClick={handleButton}>
-        {">"}
-      </button>
+      <div id="break-controlpanel">
+        <button id="break-decrement" onClick={handleButton}>
+          {"<"}
+        </button>
+        <input
+          type="range"
+          min="1"
+          max="60"
+          step="1"
+          name="break"
+          id="break-length"
+          value={breakSession}
+          onChange={({ target }) => {
+            setBreakSession(target.value);
+          }}
+        />
+        <button id="break-increment" onClick={handleButton}>
+          {">"}
+        </button>
+      </div>
 
       <span id="session-label">Session Length</span>
       <span id="session-time">{session}:00</span>
-      <button id="session-decrement" onClick={handleButton}>
-        {"<"}
-      </button>
-      <input
-        type="range"
-        min="1"
-        max="60"
-        step="1"
-        name="session"
-        id="session-length"
-        value={session}
-        onChange={({ target }) => {
-          setSession(target.value);
-        }}
-      />
-      <button id="session-increment" onClick={handleButton}>
-        {">"}
-      </button>
+      <div id="session-controlpanel">
+        <button id="session-decrement" onClick={handleButton}>
+          {"<"}
+        </button>
+        <input
+          type="range"
+          min="1"
+          max="60"
+          step="1"
+          name="session"
+          id="session-length"
+          value={session}
+          onChange={({ target }) => {
+            setSession(target.value);
+          }}
+        />
+        <button id="session-increment" onClick={handleButton}>
+          {">"}
+        </button>
+      </div>
 
       <span id="timer-label">Session</span>
-      <p id="time-left">{displayTime(time)}</p>
-      <button
-        id="start_stop"
-        onClick={() => {
-          setPlaying(!playing);
-        }}
-      >
-        {playing ? "Pause" : "Start"}
-      </button>
-      <button id="reset" onClick={handleReset}>
-        Reset
-      </button>
+      <span id="time-left">{displayTime(time)}</span>
+      <div id="timer-section">
+        <button
+          id="start_stop"
+          onClick={() => {
+            setPlaying(!playing);
+          }}
+        >
+          {playing ? "Pause" : "Start"}
+        </button>
+        <button id="reset" onClick={handleReset}>
+          Reset
+        </button>
+      </div>
 
-      <span id="volume-label">Notification Volume</span>
-      <input
-        type="range"
-        min="0.01"
-        max="1"
-        step="0.01"
-        name="volume"
-        id="volume-control"
-        value={volume}
-        onChange={({ target }) => {
-          setVolume(target.value);
-        }}
-      />
-      <audio
-        src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
-        id="beep"
-      ></audio>
+      <div id="notification-area">
+        <span id="volume-label">Notification Volume</span>
+        <input
+          type="range"
+          min="0.01"
+          max="1"
+          step="0.01"
+          name="volume"
+          id="volume-control"
+          value={volume}
+          onChange={({ target }) => {
+            setVolume(target.value);
+          }}
+        />
+        <audio
+          src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
+          id="beep"
+        ></audio>
+      </div>
     </>
   );
 };
