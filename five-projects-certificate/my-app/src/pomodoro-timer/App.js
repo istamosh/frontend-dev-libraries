@@ -34,9 +34,9 @@ const Pomodoro = () => {
         $("span:not(#timer-label)").addClass("text-white");
         $("#session-label").addClass("mt-3");
         $("[id*='-decrement'], [id*='-increment']").addClass(
-          "btn btn-primary btn-sm ms-1 me-1"
+          "btn btn-outline-light btn-sm ms-1 me-1"
         );
-        $("#start_stop, #reset").addClass("btn btn-primary ms-1 me-1");
+        $("#start_stop, #reset").addClass("btn btn-primary ms-1 me-1 mb-2");
         $("input").addClass("form-range");
         $("#break-time, #session-time").addClass("fs-5");
         $("#timer-label").addClass("fs-2");
@@ -123,6 +123,15 @@ const Pomodoro = () => {
     $("#beep")[0].currentTime = 0;
   };
 
+  // audible sound effect
+  useEffect(() => {
+    const clickSound = $("#click")[0];
+    clickSound.currentTIme = 0;
+    clickSound.play().catch((e) => {
+      console.error("Error playing audio:", e);
+    });
+  }, [session, breakSession]);
+
   return (
     <>
       <h1>Pomodoro Timer</h1>
@@ -130,7 +139,7 @@ const Pomodoro = () => {
       <span id="break-time">{breakSession}:00</span>
       <div id="break-controlpanel">
         <button id="break-decrement" onClick={handleButton}>
-          {"<"}
+          {"◀"}
         </button>
         <input
           type="range"
@@ -145,7 +154,7 @@ const Pomodoro = () => {
           }}
         />
         <button id="break-increment" onClick={handleButton}>
-          {">"}
+          {"▶"}
         </button>
       </div>
 
@@ -153,7 +162,7 @@ const Pomodoro = () => {
       <span id="session-time">{session}:00</span>
       <div id="session-controlpanel">
         <button id="session-decrement" onClick={handleButton}>
-          {"<"}
+          {"◀"}
         </button>
         <input
           type="range"
@@ -168,7 +177,7 @@ const Pomodoro = () => {
           }}
         />
         <button id="session-increment" onClick={handleButton}>
-          {">"}
+          {"▶"}
         </button>
       </div>
 
@@ -205,6 +214,10 @@ const Pomodoro = () => {
         <audio
           src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
           id="beep"
+        ></audio>
+        <audio
+          src="https://github.com/istamosh/frontend-dev-libraries/raw/master/five-projects-certificate/my-app/src/pomodoro-timer/asset/click.wav"
+          id="click"
         ></audio>
       </div>
     </>
