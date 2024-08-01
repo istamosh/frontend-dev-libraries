@@ -42,6 +42,7 @@ const Pomodoro = () => {
         $("#timer-label").addClass("fs-2");
         $("#time-left").addClass("fs-1");
         $('[id*="controlpanel"]').addClass("d-flex align-items-center");
+        $("#timer-section").addClass("d-flex justify-content-center");
         $("#notification-area").addClass("d-flex flex-column");
       });
       mounted.current = true;
@@ -139,7 +140,7 @@ const Pomodoro = () => {
       <span id="break-time">{breakSession}:00</span>
       <div id="break-controlpanel">
         <button id="break-decrement" onClick={handleButton}>
-          {"◀"}
+          {"❮"}
         </button>
         <input
           type="range"
@@ -154,7 +155,7 @@ const Pomodoro = () => {
           }}
         />
         <button id="break-increment" onClick={handleButton}>
-          {"▶"}
+          {"❯"}
         </button>
       </div>
 
@@ -162,7 +163,7 @@ const Pomodoro = () => {
       <span id="session-time">{session}:00</span>
       <div id="session-controlpanel">
         <button id="session-decrement" onClick={handleButton}>
-          {"◀"}
+          {"❮"}
         </button>
         <input
           type="range"
@@ -177,7 +178,7 @@ const Pomodoro = () => {
           }}
         />
         <button id="session-increment" onClick={handleButton}>
-          {"▶"}
+          {"❯"}
         </button>
       </div>
 
