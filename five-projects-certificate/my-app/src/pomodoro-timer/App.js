@@ -117,6 +117,19 @@ const Pomodoro = () => {
     }
   };
 
+  const handleSlider = ({ target }) => {
+    if (!playing) {
+      if (target.id.includes("break")) {
+        setShift(false);
+        setBreakSession(target.value);
+      }
+      if (target.id.includes("session")) {
+        setShift(false);
+        setSession(target.value);
+      }
+    }
+  };
+
   const handleReset = () => {
     setPlaying(false);
     setShift(false);
@@ -154,9 +167,7 @@ const Pomodoro = () => {
           name="break"
           id="break-length"
           value={breakSession}
-          onChange={({ target }) => {
-            setBreakSession(target.value);
-          }}
+          onChange={handleSlider}
         />
         <button id="break-increment" onClick={handleButton}>
           {"❯"}
@@ -177,9 +188,7 @@ const Pomodoro = () => {
           name="session"
           id="session-length"
           value={session}
-          onChange={({ target }) => {
-            setSession(target.value);
-          }}
+          onChange={handleSlider}
         />
         <button id="session-increment" onClick={handleButton}>
           {"❯"}
